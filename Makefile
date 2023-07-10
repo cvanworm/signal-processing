@@ -1,12 +1,6 @@
 CC = cc
 
-all: cli srv wor testsrv testwor
-
-testsrv: testsrv.c
-		$(CC) -g -o testsrv testsrv.c -I./ -lzmq
-
-testwor: testwor.c
-		$(CC) -g -o testwor testwor.c -I./ -lzmq
+all: cli srv wor
 
 cli: client.c
 		$(CC) -g -o cli client.c -I./ -lzmq
@@ -18,5 +12,5 @@ wor: worker.c
 		$(CC) -g -o wor worker.c -I./ -lzmq
 
 clean:
-		rm cli srv wor worker.db testsrv testwor
+		rm cli srv wor worker.db
 

@@ -12,61 +12,74 @@ void do_work(char *input, char *output);
 
 int main(int argc, char** argv) {
     //Binds socket to port
-    int port = 5555;
-    void *context = zmq_ctx_new();
-    void *responder = zmq_socket(context, ZMQ_PAIR);
-    
-    int buffer_size = 1024 * 10;
-	zmq_setsockopt(responder, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
-
-    int rc = zmq_bind(responder, "tcp://*:5555");
-    if(rc != 0) {
-        perror("Unable to bind to port\n");
-        exit(1);
+    if(argc < 2) {
+        printf("USAGE: ./worker.out <server name>\n");
+        printf("Because no server is present, using localhost\n");
     }
 
-    char send_buffer[MAXLEN], rec_buffer[MAXLEN];
-   
-    //Waits for a request from manager
-    strcpy(rec_buffer, s_recv(responder));
-    printf("Got: %s\n", rec_buffer);
-
-    //Calculates system details to send to manager
-    float upTime = 0;
-    float loadAvg = 0;
-    float memInUse;
-    float totalMem;
-    float freeMem;
-    char str [255];
+    int port = 8888;
+    char server_addr[MAXLEN];
     char host[55];
-
-
     gethostname(host, sizeof(host));
-    getMemoryDetail(&memInUse, &totalMem, &freeMem);
-    long numCores = sysconf(_SC_NPROCESSORS_ONLN);
+    host[55 - 1] = '\0';
+    sprintf(server_addr, "tcp://%s:%d", (argc < 2) ? "localhost" : argv[1], port);
+    printf("(worker, server) = (%s, %s)\n", host, server_addr);
+    // Pair pattern from worker to server/manager
+    void *context = zmq_ctx_new();
+    void *worker = zmq_socket(context, ZMQ_PAIR);
 
-    sprintf(str, "%s %li %f %f %f %f", host, numCores, freeMem, upTime, memInUse, loadAvg);
+    int buffer_size = 1024 * 10;
+	zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+	
+	//attempt to connect socket to provided server
+	int rc = zmq_connect(worker, server_addr);
 
-    printf("Sending sys data: %s\n", str);
-    s_send(responder, str);
+    char recvbuffer[MAXLEN];
+
+    //while(1){
+        //Calculates system details to send to manager
+        float upTime = 0;
+        float loadAvg = 0;
+        float memInUse;
+        float totalMem;
+        float freeMem;
+        char str [255];
+
+        getMemoryDetail(&memInUse, &totalMem, &freeMem);
+        long numCores = sysconf(_SC_NPROCESSORS_ONLN);
+
+        sprintf(str, "worker;checkin;%s;%li;%f;%f;%f;%f", host, numCores, freeMem, upTime, memInUse, loadAvg);
+
+        s_send(worker,str);
+
+        strcpy(recvbuffer, s_recv(worker));
+        printf("%s\n",recvbuffer);
+
+        getMemoryDetail(&memInUse, &totalMem, &freeMem);
+        numCores = sysconf(_SC_NPROCESSORS_ONLN);
+
+        sprintf(str, "worker;update;%s;%li;%f;%f;%f;%f", host, numCores, freeMem, upTime, memInUse, loadAvg);
+        s_send(worker,str);
+
+        strcpy(recvbuffer, s_recv(worker));
+        printf("%s\n",recvbuffer);
+
+    //}
+    
+    
+    // while(1){
+    //     s_send(worker, "Worker");
+    //     strcpy(recvbuffer, s_recv(worker));
+    //     printf("%s\n", recvbuffer);
+    //     s_send(worker, "Worker follow up");
+    //     strcpy(recvbuffer, s_recv(worker));
+    //     printf("%s\n", recvbuffer);
+
+    // }
+    
     
     //Closes socket and context
-    zmq_close(responder);
+    zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;
-}
-
-/***
- * @param input: Input string (containing some sort of data)
- * @param output: Some transformed output (string)
- **/
-void do_work(char *input, char *output) {
-    int input_len = strlen(input);
-    int i;
-    // Just reversing it
-    for(i = 0; i < input_len; i++) {
-        output[i] = input[input_len - i - 1];
-    }
-    output[input_len] = '\0';
-    return;
 }
