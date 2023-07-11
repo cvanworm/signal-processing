@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     int buffer_size = 1024 * 10;
 	zmq_setsockopt(manager, ZMQ_RCVBUF, &buffer_size, sizeof(buffer_size));
 
-    int rc = zmq_bind(manager, "tcp://*:5555");
+    int rc = zmq_bind(manager, "tcp://*:8888");
     if(rc != 0) {
         perror("Could not bind\n");
         zmq_close(manager);

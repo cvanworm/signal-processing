@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         printf("Because no server is present, using localhost\n");
     }
 
-    int port = 5555;
+    int port = 8888;
     char server_addr[MAXLEN];
     char host[55];
     gethostname(host, sizeof(host));
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     s_send(client, "client;dowork");
     
     strcpy(recvbuffer, s_recv(client));
-    printf("%s\n",recvbuffer);
+    printf("%s",recvbuffer);
 
     zmq_close(client);
     zmq_ctx_destroy(context);
