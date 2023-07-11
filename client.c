@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     char host[55];
     gethostname(host, sizeof(host));
     host[MAXLEN - 1] = '\0';
-    sprintf(server_addr, "tcp://%s:%d", (argc < 2) ? "localhost" : argv[1], port);
+    sprintf(server_addr, "tcp://%s:%d",argv[1], port);
     printf("(client, server) = (%s, %s)\n", host, server_addr);
     // Requester-Responder pattern from client to server/manager
     void *context = zmq_ctx_new();
