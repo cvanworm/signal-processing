@@ -37,8 +37,10 @@ int main(int argc, char** argv) {
 
         strcpy(recvbuffer, s_recv(manager));
         printf("%s\n", recvbuffer);
+
+        s_send(manager, "Got message\n");
         
-        processRequest(recvbuffer, manager, context, worker_array);
+        // processRequest(recvbuffer, manager, context, worker_array);
 
 
         // strcpy(recvbuffer, s_recv(manager));
