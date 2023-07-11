@@ -40,7 +40,7 @@ int populate_workers(
 
     // int i, worker_idx;
     // for(i = 0, worker_idx = 0; i < n_workers; i++, worker_idx++) {
-        void *worker = zmq_socket(context, ZMQ_REQ);
+        void *worker = zmq_socket(context, ZMQ_REP);
         if(worker == NULL) {
             fprintf(stderr, "Failed on the %dth worker socket\n", *worker_idx);
             close_workers(worker_array, *worker_idx);
