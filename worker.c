@@ -54,12 +54,12 @@ int main(int argc, char** argv) {
         zmq_close(public);
 
     //Attemp to bind to private socket
-    void *worker = bind_socket(context, "tcp://*:8888");
+    // void *worker = bind_socket(context, "tcp://*:8888");
 
-    strcpy(recvbuffer, s_recv(worker));
-    printf("%s\n", recvbuffer);
-    //Closes socket and context
-    zmq_close(worker);
+    // strcpy(recvbuffer, s_recv(worker));
+    // printf("%s\n", recvbuffer);
+    // //Closes socket and context
+    // zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;
 }

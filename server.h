@@ -25,13 +25,12 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             // sleep(1);
 
-            strcpy(sendbuffer, "Checkin recieved");
-            s_send(socket, sendbuffer);
+            s_send(socket, "Checkin Recieved");
 
-            if(populate_workers(worker_array, &n_workers, &idx, context, header[2])) {
-                exit(1);
-            }
-            printf("Worker populated\n");
+            // if(populate_workers(worker_array, &n_workers, &idx, context, header[2])) {
+            //     exit(1);
+            // }
+            // printf("Worker populated\n");
 
             
         }

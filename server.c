@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
         void *worker_array[MAXWORKERS] = {NULL, };
 
         strcpy(recvbuffer, s_recv(manager));
-        printf("%s\n", recvbuffer);
+        printf("Got: %s\n", recvbuffer);
         
         processRequest(recvbuffer, manager, context, worker_array);
 
