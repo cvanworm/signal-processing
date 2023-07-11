@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
         getMemoryDetail(&memInUse, &totalMem, &freeMem);
         long numCores = sysconf(_SC_NPROCESSORS_ONLN);
 
-        sprintf(str, "public;checkin;%s;%s;%li;%f;%f;%f;%f", argv[1],host, numCores, freeMem, upTime, memInUse, loadAvg);
+        sprintf(str, "worker;checkin;%s;%s;%li;%f;%f;%f;%f", argv[1],host, numCores, freeMem, upTime, memInUse, loadAvg);
 
         s_send(public,str);
 

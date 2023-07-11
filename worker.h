@@ -2,7 +2,6 @@
 #include "zmq_msgs.h"
 #include "socket.h"
 
-#define MAXLEN 512
 #define MAXWORKERS 10
 
 void close_workers(void **worker_array, int n_workers) {

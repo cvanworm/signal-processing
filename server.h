@@ -8,6 +8,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
     int n_workers, idx = 0;
 
     char **header = splitStringOnSemiColons(request, &numTokens);
+    printf("%s\n", header[0]);
     
     // List of worker actions
     if (strcmp(header[0], "worker") == 0)
@@ -25,8 +26,9 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             // sleep(1);
 
-            //s_send(socket, "Checkin Recieved");
-
+            s_send(socket, "Checkin Recieved");
+            
+            printf("Checkin recieved: populating worker\n");
             if(populate_workers(worker_array, &n_workers, &idx, context, header[2])) {
                 exit(1);
             }
