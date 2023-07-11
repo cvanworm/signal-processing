@@ -56,6 +56,7 @@ int main(int argc, char** argv) {
     //Attempt to bind to private socket
     void *worker = bind_socket(context, "tcp://*:5555");
     while(1){
+        s_send(worker, "Need Work");
         strcpy(recvbuffer, s_recv(worker));
         printf("%s\n",recvbuffer);
     }
