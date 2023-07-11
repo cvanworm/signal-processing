@@ -12,5 +12,5 @@ wor: worker.c
 		$(CC) -g -o wor worker.c -I./ -lzmq
 
 clean:
-		rm cli srv wor worker.db ip.txt
+		rm cli srv wor worker.db
 
