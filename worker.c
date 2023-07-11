@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     gethostname(host, sizeof(host));
     host[MAXLEN - 1] = '\0';
     sprintf(server_addr, "tcp://%s:%d", argv[1], port);
-    printf("(public, server) = (%s, %s)\n", host, server_addr);
+    printf("(worker, server) = (%s, %s)\n", host, server_addr);
     void *context=zmq_ctx_new();
     void* public = connect_socket(context, server_addr);
     //check if socket returned NULL
@@ -53,29 +53,13 @@ int main(int argc, char** argv) {
 
         zmq_close(public);
 
+    //Attemp to bind to private socket
+    void *worker = bind_socket(context, "tcp://*:8888");
 
-    // //Binds socket to port
-    // port = 8888;
-    // context = zmq_ctx_new();
-    // void *public = zmq_socket(context, ZMQ_REQ);
-    
-    // // int buffer_size = 1024 * 10;
-	// // zmq_setsockopt(public, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
-
-    // rc = zmq_bind(public, "tcp://*:8888");
-    // if(rc != 0) {
-    //     perror("Unable to bind to port\n");
-    //     exit(1);
-    // }
-
-    // s_send(public, "Waiting for work");
-
-    strcpy(recvbuffer, s_recv(public));
+    strcpy(recvbuffer, s_recv(worker));
     printf("%s\n", recvbuffer);
-    
-    
     //Closes socket and context
-    zmq_close(public);
+    zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;
 }
