@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         printf("Because no server is present, using localhost\n");
     }
 
-    int port = 8888;
+    int port = 5555;
     char server_addr[MAXLEN];
     char host[55];
     gethostname(host, sizeof(host));
@@ -38,8 +38,8 @@ int main(int argc, char** argv) {
         s_send(client, "client;dowork");
 
         // block and wait for response from server
-        strcpy(recvbuffer, s_recv(client)); 
-        printf("%s\n", recvbuffer);
+        // strcpy(recvbuffer, s_recv(client)); 
+        // printf("%s\n", recvbuffer);
     //     s_send(client, "Client follow up");
 
     //     // block and wait for response from server

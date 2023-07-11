@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     }
 
 
-    //while(1){
+    while(1){
         char recvbuffer[MAXLEN];
         char sendbuffer[MAXLEN];
         void *worker_array[MAXWORKERS] = {NULL, };
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
         // strcpy(recvbuffer, s_recv(manager));
         // printf("%s\n", recvbuffer);
         // s_send(manager, "Some data");
-   // }
+   }
     return 0;
 }
 
