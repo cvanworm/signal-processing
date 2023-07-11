@@ -61,10 +61,6 @@ int main(int argc, char** argv) {
         
         // processRequest(recvbuffer, manager, context, worker_array);
 
-
-        // strcpy(recvbuffer, s_recv(manager));
-        // printf("%s\n", recvbuffer);
-        // s_send(manager, "Some data");
    }
     return 0;
 }

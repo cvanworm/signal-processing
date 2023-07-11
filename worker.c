@@ -16,24 +16,50 @@ int main(int argc, char** argv) {
         printf("USAGE: ./worker.out <server name>\n");
         printf("Because no server is present, using localhost\n");
     }
-    int port = 5555;
-    char server_addr[55];
-    char host[55];
-    gethostname(host, sizeof(host));
-    host[55 - 1] = '\0';
-    sprintf(server_addr, "tcp://%s:%d", (argc < 2) ? "localhost" : argv[1], port);
-    printf("(worker, server) = (%s, %s)\n", host, server_addr);
-    // Pair pattern from worker to server/manager
+    // int port = 5555;
+    // char server_addr[55];
+    // char host[55];
+    // gethostname(host, sizeof(host));
+    // host[55 - 1] = '\0';
+    // sprintf(server_addr, "tcp://%s:%d", (argc < 2) ? "localhost" : argv[1], port);
+    // printf("(worker, server) = (%s, %s)\n", host, server_addr);
+    // // Pair pattern from worker to server/public
+    // void *context = zmq_ctx_new();
+    // void *public = zmq_socket(context, ZMQ_PAIR);
+
+    // int buffer_size = 1024 * 10;
+	// zmq_setsockopt(public, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+	
+	// //attempt to connect socket to provided server
+	// int rc = zmq_connect(public, server_addr);
+
     void *context = zmq_ctx_new();
-    void *public = zmq_socket(context, ZMQ_PAIR);
+    if(context == NULL) {
+        perror("Could not create zmq context\n");
+        exit(1);
+    }
+    void *public = zmq_socket (context, ZMQ_PAIR);
+    if(public == NULL) {
+        perror("Could not create public socket\n");
+        exit(1);
+    }
 
     int buffer_size = 1024 * 10;
-	zmq_setsockopt(public, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
-	
-	//attempt to connect socket to provided server
-	int rc = zmq_connect(public, server_addr);
+	zmq_setsockopt(public, ZMQ_RCVBUF, &buffer_size, sizeof(buffer_size));
 
-    //Calculates system details to send to manager
+    int rc = zmq_bind(public, "tcp://*:8888");
+    if(rc != 0) {
+        perror("Could not bind\n");
+        zmq_close(public);
+        zmq_ctx_destroy(context);
+        exit(1);
+    }
+
+    char host[55];
+    gethostname(host, sizeof(host));
+    host[MAXLEN - 1] = '\0';
+
+    //Calculates system details to send to public
         float upTime = 0;
         float loadAvg = 0;
         float memInUse;
@@ -56,7 +82,7 @@ int main(int argc, char** argv) {
 
 
     //Binds socket to port
-    port = 8888;
+    int port = 8888;
     context = zmq_ctx_new();
     void *worker = zmq_socket(context, ZMQ_PAIR);
     
