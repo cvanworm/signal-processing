@@ -76,7 +76,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
         {
             // This will also have to be connected with the requesting client somehow?
             s_send(worker_array[0], "wOrK");
-            printf("sent work");
+            s_send(worker_array[1], "wOrK");
         }
     }
     free(header);

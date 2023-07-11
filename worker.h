@@ -30,7 +30,7 @@ int populate_workers(
         return 1;
     }
 
-    int port = 5555;
+    int port = 8888;
     char worker_addr[MAXLEN];
     char host[55];
     gethostname(host, sizeof(host));
