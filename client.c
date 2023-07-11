@@ -14,28 +14,42 @@ int main(int argc, char** argv) {
         printf("Because no server is present, using localhost\n");
     }
 
+    // int port = 8888;
+    // char server_addr[MAXLEN];
+    // char host[55];
+    // gethostname(host, sizeof(host));
+    // host[MAXLEN - 1] = '\0';
+    // sprintf(server_addr, "tcp://%s:%d",argv[1], port);
+    // printf("(client, server) = (%s, %s)\n", host, server_addr);
+    // // Requester-Responder pattern from client to server/manager
+    // void *context = zmq_ctx_new();
+    // void *client = zmq_socket(context, ZMQ_PAIR);
+
+    // int buffer_size = 1024 * 10;
+	// zmq_setsockopt(client, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+	
+	// //attempt to connect socket to provided server
+	// int rc = zmq_connect(client, server_addr);
+    // if(rc != 0) {
+    //     perror("Could not bind\n");
+    //     zmq_close(client);
+    //     zmq_ctx_destroy(context);
+    //     exit(1);
+    // }
+
     int port = 8888;
     char server_addr[MAXLEN];
     char host[55];
     gethostname(host, sizeof(host));
     host[MAXLEN - 1] = '\0';
-    sprintf(server_addr, "tcp://%s:%d",argv[1], port);
+    sprintf(server_addr, "tcp://%s:%d", (argc < 2) ? "localhost" : argv[1], port);
     printf("(client, server) = (%s, %s)\n", host, server_addr);
     // Requester-Responder pattern from client to server/manager
     void *context = zmq_ctx_new();
-    void *client = zmq_socket(context, ZMQ_PAIR);
-
-    int buffer_size = 1024 * 10;
-	zmq_setsockopt(client, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+    void *client = zmq_socket(context, ZMQ_REQ);
 	
 	//attempt to connect socket to provided server
 	int rc = zmq_connect(client, server_addr);
-    if(rc != 0) {
-        perror("Could not bind\n");
-        zmq_close(client);
-        zmq_ctx_destroy(context);
-        exit(1);
-    }
     // set up message/data to be sent
     char sendbuffer[MAXLEN], recvbuffer[MAXLEN];
 
