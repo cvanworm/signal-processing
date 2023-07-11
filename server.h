@@ -73,9 +73,8 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
         if (strcmp(header[1], "dowork") == 0)
         {
             // This will also have to be connected with the requesting client somehow?
-            int worker_id = 0;
             
-            s_send(worker_array[worker_id], "wOrK");
+            s_send(worker_array[0], "wOrK");
         }
     }
     free(header);
