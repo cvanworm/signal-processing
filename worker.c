@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
         zmq_close(public);
 
     //Attempt to bind to private socket
-    void *worker = bind_socket(context, "tcp://*:8888");
+    void *worker = bind_socket(context, "tcp://*:5555");
     while(1){
         strcpy(recvbuffer, s_recv(worker));
         printf("%s\n",recvbuffer);

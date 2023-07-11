@@ -5,7 +5,8 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
     char sendbuffer[MAXLEN];
     char recvbuffer[MAXLEN];
     int numTokens;
-    int n_workers, idx = 0;
+    int n_workers;
+    int idx;
 
     char **header = splitStringOnSemiColons(request, &numTokens);
     printf("%s\n", header[0]);
@@ -32,7 +33,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             if(populate_workers(worker_array, &n_workers, &idx, context, header[2])) {
                 exit(1);
             }
-            s_send(worker_array[idx], "Worker populated");
+            //s_send(worker_array[idx], "Worker populated");
 
             
         }
@@ -73,7 +74,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
         if (strcmp(header[1], "dowork") == 0)
         {
             // This will also have to be connected with the requesting client somehow?
-            
+            printf("Sending work\n");
             s_send(worker_array[0], "wOrK");
         }
     }
