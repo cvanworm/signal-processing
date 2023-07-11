@@ -59,6 +59,7 @@ int main(int argc, char** argv) {
         s_send(worker, "Need Work");
         strcpy(recvbuffer, s_recv(worker));
         printf("%s\n",recvbuffer);
+        s_send(worker, "Finished work");
     }
    
 
