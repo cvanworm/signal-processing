@@ -16,9 +16,8 @@ int main(int argc, char** argv) {
         printf("USAGE: ./worker.out <server name>\n");
         printf("Because no server is present, using localhost\n");
     }
-
-    int port = 8888;
-    char server_addr[MAXLEN];
+    int port = 5555;
+    char server_addr[55];
     char host[55];
     gethostname(host, sizeof(host));
     host[55 - 1] = '\0';
@@ -26,56 +25,54 @@ int main(int argc, char** argv) {
     printf("(worker, server) = (%s, %s)\n", host, server_addr);
     // Pair pattern from worker to server/manager
     void *context = zmq_ctx_new();
-    void *worker = zmq_socket(context, ZMQ_PAIR);
+    void *public = zmq_socket(context, ZMQ_PAIR);
 
     int buffer_size = 1024 * 10;
-	zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+	zmq_setsockopt(public, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
 	
 	//attempt to connect socket to provided server
-	int rc = zmq_connect(worker, server_addr);
+	int rc = zmq_connect(public, server_addr);
 
-    char recvbuffer[MAXLEN];
-
-    //while(1){
-        //Calculates system details to send to manager
+    //Calculates system details to send to manager
         float upTime = 0;
         float loadAvg = 0;
         float memInUse;
         float totalMem;
         float freeMem;
-        char str [255];
+        char str [MAXLEN];
+        char recvbuffer[MAXLEN];
 
         getMemoryDetail(&memInUse, &totalMem, &freeMem);
         long numCores = sysconf(_SC_NPROCESSORS_ONLN);
 
-        sprintf(str, "worker;checkin;%s;%li;%f;%f;%f;%f", host, numCores, freeMem, upTime, memInUse, loadAvg);
+        sprintf(str, "worker;checkin;%s;%s;%li;%f;%f;%f;%f", argv[1],host, numCores, freeMem, upTime, memInUse, loadAvg);
 
-        s_send(worker,str);
+        s_send(public,str);
 
-        strcpy(recvbuffer, s_recv(worker));
+        strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);
 
-        getMemoryDetail(&memInUse, &totalMem, &freeMem);
-        numCores = sysconf(_SC_NPROCESSORS_ONLN);
+        zmq_close(public);
 
-        sprintf(str, "worker;update;%s;%li;%f;%f;%f;%f", host, numCores, freeMem, upTime, memInUse, loadAvg);
-        s_send(worker,str);
 
-        strcpy(recvbuffer, s_recv(worker));
-        printf("%s\n",recvbuffer);
-
-    //}
+    //Binds socket to port
+    port = 8888;
+    context = zmq_ctx_new();
+    void *worker = zmq_socket(context, ZMQ_PAIR);
     
-    
-    // while(1){
-    //     s_send(worker, "Worker");
-    //     strcpy(recvbuffer, s_recv(worker));
-    //     printf("%s\n", recvbuffer);
-    //     s_send(worker, "Worker follow up");
-    //     strcpy(recvbuffer, s_recv(worker));
-    //     printf("%s\n", recvbuffer);
+    buffer_size = 1024 * 10;
+	zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
 
-    // }
+    rc = zmq_bind(worker, "tcp://*:8888");
+    if(rc != 0) {
+        perror("Unable to bind to port\n");
+        exit(1);
+    }
+
+    s_send(worker, "Waiting for work");
+
+    strcpy(recvbuffer, s_recv(worker));
+    printf("%s\n", recvbuffer);
     
     
     //Closes socket and context

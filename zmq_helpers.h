@@ -165,18 +165,26 @@ char* openFile(char *fname, long* numbytes){
     return buffer;
 }
 
-char* formatFile(char* str, long numbytes){
+
+void appendStringToFile(const char* filename, const char* string) {
+    FILE* file = fopen(filename, "a");
+    if (file == NULL) {
+        printf("Failed to open file: %s\n", filename);
+        return;
+    }
+
+    fprintf(file, "%s\n", string);
+    fclose(file);
+}
+
+char* formatString(char* str, long numbytes){
     char *tmp = (char*)calloc(numbytes+1, sizeof(char));
-    strcat(tmp, "[");
     int length = strlen(str);
     int i;
-    for(i = 0; i<length-1; i++){
+    for(i = 0; i<length; i++){
         if(str[i]=='\n'){
-            str[i] = ',';
+            str[i] = ';';
         }
-    }
-    if(str[i]=='\n'){
-        str[i] = ']';
     }
     strcat(tmp, str);
     return tmp;
@@ -243,6 +251,22 @@ char** splitStringOnSemiColons(const char* input, int* numTokens) {
     tokens[*numTokens] = NULL;
 
     return tokens;
+}
+
+int getNumberOfElements(char** array) {
+    int count = 0;
+    while (array[count] != NULL) {
+        count++;
+    }
+    return count;
+}
+
+int getNumberElements(void** array) {
+    int count = 0;
+    while (array[count] != NULL) {
+        count++;
+    }
+    return count;
 }
 
 

@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     int buffer_size = 1024 * 10;
 	zmq_setsockopt(manager, ZMQ_RCVBUF, &buffer_size, sizeof(buffer_size));
 
-    int rc = zmq_bind(manager, "tcp://*:8888");
+    int rc = zmq_bind(manager, "tcp://*:5555");
     if(rc != 0) {
         perror("Could not bind\n");
         zmq_close(manager);
@@ -28,20 +28,23 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    while(1){
+
+    //while(1){
         char recvbuffer[MAXLEN];
         char sendbuffer[MAXLEN];
-        int numTokens;
+        void *worker_array[MAXWORKERS] = {NULL, };
+        // int n_workers, worker_idx = 0;
 
         strcpy(recvbuffer, s_recv(manager));
         printf("%s\n", recvbuffer);
         
-        processRequest(recvbuffer, manager);
+        processRequest(recvbuffer, manager, context, worker_array);
 
 
         // strcpy(recvbuffer, s_recv(manager));
         // printf("%s\n", recvbuffer);
         // s_send(manager, "Some data");
-    }
+   // }
     return 0;
 }
+
