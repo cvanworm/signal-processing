@@ -21,7 +21,7 @@ int populate_workers(
     void *context,
     char *worker_ip
 ) {
-    printf("IP: %s\n", worker_ip);
+    //printf("IP: %s\n", worker_ip);
     int n_workers = getNumberElements(worker_array);
     *worker_idx = n_workers;
     if(n_workers > MAXWORKERS) {
