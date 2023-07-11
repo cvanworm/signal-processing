@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
     context = zmq_ctx_new();
     void *worker = zmq_socket(context, ZMQ_PAIR);
     
-    buffer_size = 1024 * 10;
+    int buffer_size = 1024 * 10;
 	zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
 
     rc = zmq_bind(worker, "tcp://*:8888");
