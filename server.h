@@ -32,13 +32,8 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
                 exit(1);
             }
             printf("Worker populated\n");
-            
-            strcpy(recvbuffer, s_recv(worker_array[idx]));
-            printf("%s\n", recvbuffer);
 
-            
-
-            sprintf(sendbuffer, "WoRk");
+            sprintf(sendbuffer, "Wait for work");
             s_send(worker_array[idx], sendbuffer);
         }
         else if (strcmp(header[1], "waiting") == 0)

@@ -58,10 +58,10 @@ int main(int argc, char** argv) {
     //Binds socket to port
     port = 8888;
     context = zmq_ctx_new();
-    void *worker = zmq_socket(context, ZMQ_PAIR);
+    void *worker = zmq_socket(context, ZMQ_REP);
     
-    int buffer_size = 1024 * 10;
-	zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+    // int buffer_size = 1024 * 10;
+	// zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
 
     rc = zmq_bind(worker, "tcp://*:8888");
     if(rc != 0) {
@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    s_send(worker, "Waiting for work");
+    // s_send(worker, "Waiting for work");
 
     strcpy(recvbuffer, s_recv(worker));
     printf("%s\n", recvbuffer);

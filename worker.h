@@ -40,15 +40,15 @@ int populate_workers(
 
     // int i, worker_idx;
     // for(i = 0, worker_idx = 0; i < n_workers; i++, worker_idx++) {
-        void *worker = zmq_socket(context, ZMQ_PAIR);
+        void *worker = zmq_socket(context, ZMQ_REQ);
         if(worker == NULL) {
             fprintf(stderr, "Failed on the %dth worker socket\n", *worker_idx);
             close_workers(worker_array, *worker_idx);
             return 1;
         }
 
-        int buffer_size = 1024 * 10;
-	    zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+        // int buffer_size = 1024 * 10;
+	    // zmq_setsockopt(worker, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
         int worker_port = 8888;
         char worker_addr[255];
         sprintf(worker_addr, "tcp://%s:%d", worker_ip,worker_port);
