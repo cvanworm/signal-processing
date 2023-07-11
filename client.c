@@ -30,22 +30,18 @@ int main(int argc, char** argv) {
 	
 	//attempt to connect socket to provided server
 	int rc = zmq_connect(client, server_addr);
+    if(rc != 0) {
+        perror("Could not bind\n");
+        zmq_close(client);
+        zmq_ctx_destroy(context);
+        exit(1);
+    }
     // set up message/data to be sent
     char sendbuffer[MAXLEN], recvbuffer[MAXLEN];
-    // strcpy(sendbuffer, host);
-    //while(1){
-        // send message to server
-        s_send(client, "client;dowork");
 
-        // block and wait for response from server
-        // strcpy(recvbuffer, s_recv(client)); 
-        // printf("%s\n", recvbuffer);
-    //     s_send(client, "Client follow up");
 
-    //     // block and wait for response from server
-    //     strcpy(recvbuffer, s_recv(client)); 
-    //     printf("%s\n", recvbuffer);
-    //}
+    // send message to server
+    s_send(client, "client;dowork");
     
 
     zmq_close(client);
