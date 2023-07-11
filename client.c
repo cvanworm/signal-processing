@@ -40,8 +40,8 @@ int main(int argc, char** argv) {
     // send message to server
     s_send(client, "client;dowork");
     
-    strcpy(recvbuffer, s_recv(client));
-    printf("%s",recvbuffer);
+    // strcpy(recvbuffer, s_recv(client));
+    // printf("%s",recvbuffer);
 
     zmq_close(client);
     zmq_ctx_destroy(context);

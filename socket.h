@@ -21,7 +21,7 @@ void* bind_socket(void *context, const char *address){
 		printf("BS_error 2: Failed to bind socket. Error: %s\n", zmq_strerror(zmq_errno()));
 		return NULL;
 		zmq_close(socket);}
-	printf("Connection succesful to client");
+	//printf("Connection succesful to client");
 	return socket;
 }
 
@@ -43,7 +43,7 @@ void* connect_socket(void *context, const char *address){
 		return NULL;
 		zmq_close(socket);
 	}
-	printf("Connection succesful to server at %s\n", address);
+	//printf("Connection succesful to server at %s\n", address);
 	return socket;
 	
 }
