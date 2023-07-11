@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     gethostname(host, sizeof(host));
     host[MAXLEN - 1] = '\0';
     sprintf(server_addr, "tcp://%s:%d", argv[1], port);
-    printf("(worker, server) = (%s, %s)\n", host, server_addr);
+    printf("(worker, manager) = (%s, %s)\n", host, server_addr);
     void *context=zmq_ctx_new();
     void* public = connect_socket(context, server_addr);
     //check if socket returned NULL
@@ -53,13 +53,14 @@ int main(int argc, char** argv) {
 
         zmq_close(public);
 
-    //Attemp to bind to private socket
-    // void *worker = bind_socket(context, "tcp://*:8888");
+    //Attempt to bind to private socket
+    void *worker = bind_socket(context, "tcp://*:8888");
 
-    // strcpy(recvbuffer, s_recv(worker));
-    // printf("%s\n", recvbuffer);
-    // //Closes socket and context
-    // zmq_close(worker);
+    strcpy(recvbuffer, s_recv(worker));
+    printf("%s\n", recvbuffer);
+
+    //Closes socket and context
+    zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;
 }

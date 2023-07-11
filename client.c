@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     gethostname(host, sizeof(host));
     host[MAXLEN - 1] = '\0';
     sprintf(server_addr, "tcp://%s:%d", argv[1], port);
-    printf("(client, server) = (%s, %s)\n", host, server_addr);
+    printf("(client, worker) = (%s, %s)\n", host, server_addr);
     void *context=zmq_ctx_new();
     void* client = connect_socket(context, server_addr);
     //check if socket returned NULL

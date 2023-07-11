@@ -32,7 +32,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             if(populate_workers(worker_array, &n_workers, &idx, context, header[2])) {
                 exit(1);
             }
-            printf("Worker populated\n");
+            s_send(worker_array[idx], "Worker populated");
 
             
         }
