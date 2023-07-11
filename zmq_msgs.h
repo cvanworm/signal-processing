@@ -1,14 +1,14 @@
 #include<string.h>
 #include<zmq.h>
 
-
+#define MAXLEN 512
 static char * s_recv (void *socket) {
-    char buffer [256];
-    int size = zmq_recv (socket, buffer, 255, 0);
+    char buffer [MAXLEN];
+    int size = zmq_recv (socket, buffer, MAXLEN-1, 0);
     if (size == -1)
         return NULL;
-    if (size > 255)
-        size = 255;
+    if (size > MAXLEN-1)
+        size = MAXLEN-1;
     buffer [size] = 0;
     /* use strndup(buffer, sizeof(buffer)-1) in *nix */
     return strdup (buffer);

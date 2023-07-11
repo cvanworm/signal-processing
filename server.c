@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
         strcpy(recvbuffer, s_recv(manager));
         printf("Got: %s\n", recvbuffer);
         
-        processRequest(recvbuffer, &manager, &context, worker_array);
+        processRequest(recvbuffer, manager, context, worker_array);
 
    }
     return 0;
