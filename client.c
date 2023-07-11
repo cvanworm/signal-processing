@@ -1,9 +1,4 @@
-// client.c: Requests for some job to be completed
-#include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <zmq.h>
 #include "zmq_msgs.h"
 #include "socket.h"
 

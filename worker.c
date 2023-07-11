@@ -1,10 +1,7 @@
-#include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <zmq.h>
 #include "sysdata.h"
 #include "zmq_msgs.h"
+#include "socket.h"
 
 #define MAXLEN 512
 
@@ -57,19 +54,19 @@ int main(int argc, char** argv) {
         zmq_close(public);
 
 
-    //Binds socket to port
-    port = 8888;
-    context = zmq_ctx_new();
-    void *public = zmq_socket(context, ZMQ_REQ);
+    // //Binds socket to port
+    // port = 8888;
+    // context = zmq_ctx_new();
+    // void *public = zmq_socket(context, ZMQ_REQ);
     
-    // int buffer_size = 1024 * 10;
-	// zmq_setsockopt(public, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
+    // // int buffer_size = 1024 * 10;
+	// // zmq_setsockopt(public, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
 
-    rc = zmq_bind(public, "tcp://*:8888");
-    if(rc != 0) {
-        perror("Unable to bind to port\n");
-        exit(1);
-    }
+    // rc = zmq_bind(public, "tcp://*:8888");
+    // if(rc != 0) {
+    //     perror("Unable to bind to port\n");
+    //     exit(1);
+    // }
 
     // s_send(public, "Waiting for work");
 
