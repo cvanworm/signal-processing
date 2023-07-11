@@ -15,9 +15,6 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
         // Adds worker info to the database for later use
         if (strcmp(header[1], "checkin") == 0)
         {
-            // char fname[] = "ip.txt";
-            // appendStringToFile(fname, header[2]);
-
             // char *command = "python3";
             // char *arguments[] = {"python3", "db/insert.py", header[3], header[4], header[5], header[6], header[7], header[8], NULL};
 
@@ -41,12 +38,8 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
 
             
 
-            // sprintf(sendbuffer, "WoRk");
-            // s_send(worker_array[worker_id], sendbuffer);
-
-            
-
-            // Receives confirmation that a worker is waiting for some action and eventually will send data to work with
+            sprintf(sendbuffer, "WoRk");
+            s_send(worker_array[idx], sendbuffer);
         }
         else if (strcmp(header[1], "waiting") == 0)
         {

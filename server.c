@@ -54,12 +54,12 @@ int main(int argc, char** argv) {
         void *worker_array[MAXWORKERS] = {NULL, };
         // int n_workers, worker_idx = 0;
 
-        strcpy(recvbuffer, s_recv(manager));
-        printf("%s\n", recvbuffer);
+        // strcpy(recvbuffer, s_recv(manager));
+        // printf("%s\n", recvbuffer);
 
-        s_send(manager, "Got message\n");
+        // s_send(manager, "Got message\n");
         
-        // processRequest(recvbuffer, manager, context, worker_array);
+        processRequest(recvbuffer, manager, context, worker_array);
 
    }
     return 0;
