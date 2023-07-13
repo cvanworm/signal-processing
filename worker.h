@@ -46,7 +46,7 @@ void *checkForUpdate(void *socket){
             //     execvp(command, arguments);
             // }
             // sleep(1);
-            printf("Received update from %s\n", header[3]);
+            printf("Received update from %s\n", header[2]);
         }
     }     
 }
