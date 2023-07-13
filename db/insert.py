@@ -4,7 +4,7 @@ import sys
 def insertWorkerInfo(host,cores,mem_avail,uptime,mem_used,load):
     conn = sqlite3.connect('worker.db')
     cursor = conn.cursor()
-    insert = """INSERT INTO WORKER_DATA (HOSTNAME,CORES,MEMAVAIL,UPTIME,MEMUSED,LOADAVG)
+    insert = """INSERT INTO WORKER_DATA (HOSTID,CORES,MEMAVAIL,UPTIME,MEMUSED,LOADAVG)
                 VALUES (?, ?, ?, ?, ?, ?);"""
     
     data = (host,cores,mem_avail,uptime,mem_used,load)

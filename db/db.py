@@ -6,7 +6,7 @@ cursor = conn.cursor()
 #Doping EMPLOYEE table if already exists.
 cursor.execute("DROP TABLE IF EXISTS WORKER_DATA")
 conn.execute('''CREATE TABLE WORKER_DATA
-         (HOSTNAME         TEXT     NOT NULL,
+         (HOSTID         TEXT     NOT NULL,
          CORES             TEXT     NOT NULL,
          MEMAVAIL          TEXT     NOT NULL,
          UPTIME            TEXT     NOT NULL,

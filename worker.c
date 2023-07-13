@@ -1,9 +1,5 @@
-#include <unistd.h>
-#include "sysdata.h"
-#include "zmq_msgs.h"
-#include "socket.h"
-
-#define MAXLEN 512
+#include <pthread.h>
+#include "worker.h"
 
 void do_work(char *input, char *output);
 
@@ -33,18 +29,20 @@ int main(int argc, char** argv) {
     }
 
     //Calculates system details to send to public
-        float upTime = 0;
-        float loadAvg = 0;
-        float memInUse;
-        float totalMem;
-        float freeMem;
+        // float upTime = 0;
+        // float loadAvg = 0;
+        // float memInUse;
+        // float totalMem;
+        // float freeMem;
         char str [MAXLEN];
         char recvbuffer[MAXLEN];
 
-        getMemoryDetail(&memInUse, &totalMem, &freeMem);
-        long numCores = sysconf(_SC_NPROCESSORS_ONLN);
+        // getMemoryDetail(&memInUse, &totalMem, &freeMem);
+        // long numCores = sysconf(_SC_NPROCESSORS_ONLN);
 
-        sprintf(str, "worker;checkin;%s;%s;%li;%f;%f;%f;%f", "10.10.40.35",host, numCores, freeMem, upTime, memInUse, loadAvg);
+        char *sys = systemDetails();
+
+        sprintf(str, "worker;checkin;%s;%s;%s", "10.10.40.35",host, sys);
 
         s_send(public,str);
 

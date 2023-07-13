@@ -9,7 +9,7 @@ def updateWorkerInfo(host,mem_avail,uptime,mem_used,load):
                     UPTIME = ?,
                     MEMUSED = ?,
                     LOADAVG =?
-                WHERE HOSTNAME = ?"""
+                WHERE HOSTID = ?"""
     
     data = (mem_avail,uptime,mem_used,load,host)
 
