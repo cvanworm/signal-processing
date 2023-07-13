@@ -23,7 +23,7 @@ void *updateManager(void *input){
 
         sprintf(str, "worker;update;%s;%s", host, sys);
         printf("%s\n",str);
-        // s_send((void *)input,str);
+        s_send((void *)input,str);
         
     }
 }
