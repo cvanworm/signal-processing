@@ -261,13 +261,13 @@ int getNumberOfElements(char** array) {
     return count;
 }
 
-int getNumberElements(void** array) {
-    int count = 0;
-    while (array[count] != NULL) {
-        count++;
-    }
-    return count;
-}
+// int getNumberElements(struct workers* array) {
+//     int count = 0;
+//     while (array[count] != NULL) {
+//         count++;
+//     }
+//     return count;
+// }
 
 
 typedef int (*function_type)(int,int);

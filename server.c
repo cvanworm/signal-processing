@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
     //Attemp to bind socket
     void *manager = bind_socket(context, "tcp://*:8888");
 
-    void *worker_array[MAXWORKERS] = {NULL, };
+    struct workers worker_array[MAXWORKERS] = {NULL, };
 
     while(1){
         char recvbuffer[MAXLEN];

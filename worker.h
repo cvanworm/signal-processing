@@ -26,21 +26,25 @@ void *updateManager(void *socket){
 }
 
 void *checkForUpdate(void *socket){
-    int i = 0;
     while(1){
         char recvbuffer[MAXLEN];
         int rc = zmq_recv(socket, recvbuffer, MAXLEN, 0);
         if(rc == -1 && zmq_errno() == EAGAIN){
             printf("Timeout occured\n");
-            return 0;
             //remove from database/worker_array
+            return 0;
+            
         }else{
+            // char *command = "python3";
+            // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
+
+            // int pid = fork();
+            // if (pid == 0)
+            // {
+            //     execvp(command, arguments);
+            // }
+            // sleep(1);
             printf("Received update\n");
-            if(i%2 == 0){
-                printf("work\n");
-                s_send(socket, "work");
-            }
-            i++;
         }
     }     
 }

@@ -3,8 +3,21 @@
 
 #define MAXWORKERS 10
 
+struct workers {
+    void *sock;
+    char *host;
+};
+
+int getNumberElements(struct workers* array) {
+    int count = 0;
+    while (array[count].sock != NULL) {
+        count++;
+    }
+    return count;
+}
+
 int populate_workers(
-    void **worker_array,
+    struct workers* worker_array,
     int *p_n_workers,
     int *worker_idx,
     void *context,
@@ -13,7 +26,7 @@ int populate_workers(
 
 void close_workers(void **worker_array, int n_workers);
 
-void processRequest(char *request, void *socket, void *context, void **worker_array)
+void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
 {
     char sendbuffer[MAXLEN];
     char recvbuffer[MAXLEN];
@@ -22,7 +35,6 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
     int idx;
 
     char **header = splitStringOnSemiColons(request, &numTokens);
-    //printf("%s\n", header[0]);
     
     // List of worker actions
     if (strcmp(header[0], "worker") == 0)
@@ -46,10 +58,10 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             //     execvp(command, arguments);
             // }
             //sleep(1);
-            s_send(worker_array[idx], "Worker populated");
+            s_send(worker_array[idx].sock, "Worker populated");
 
             pthread_t thread_id;
-            pthread_create(&thread_id, NULL, checkForUpdate, worker_array[idx]);
+            pthread_create(&thread_id, NULL, checkForUpdate, worker_array[idx].sock);
             int ret = pthread_detach(thread_id);
             if(ret != 0){
                 printf("Error occured with thread.");
@@ -57,35 +69,16 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             }
             
         }
-        // After doing some work, the worker will send an update on its system details
-        // else if (strcmp(header[1], "update") == 0)
-        // {
-        //     // char *command = "python3";
-        //     // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
-
-        //     // int pid = fork();
-        //     // if (pid == 0)
-        //     // {
-        //     //     execvp(command, arguments);
-        //     // }
-        //     // sleep(1);
-
-        //     //printf("Update received\n");
-        //     sprintf(sendbuffer, "Update recieved");
-        //     s_send(socket, sendbuffer);
-
-
-        //     s_send(worker_array[0], "test");
-        // }
+        
     }
     else if (strcmp(header[0], "client") == 0)
     {
         if (strcmp(header[1], "file") == 0)
         {
             // This will also have to be connected with the requesting client somehow?
-            s_send(worker_array[0], "wOrK");
+            s_send(worker_array[0].sock, "work");
             
-            strcpy(recvbuffer, s_recv(worker_array[0]));
+            strcpy(recvbuffer, s_recv(worker_array[0].sock));
             s_send(socket, recvbuffer);
         }
     }
@@ -103,7 +96,7 @@ void close_workers(void **worker_array, int n_workers) {
 }
 
 int populate_workers(
-    void **worker_array,
+    struct workers* worker_array,
     int *p_n_workers,
     int *worker_idx,
     void *context,
@@ -141,8 +134,13 @@ int populate_workers(
     	zmq_ctx_destroy(context);
     }
 
+    struct workers w;
+    w.sock = worker;
+    w.host = host;
+
+
     // connected, to assign worker to array
-    worker_array[*worker_idx] = worker;
+    worker_array[*worker_idx] = w;
 
     *p_n_workers = n_workers;
     return 0;
