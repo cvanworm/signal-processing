@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 
 
     // send message to server
-    s_send(client, "client;dowork");
+    s_send(client, "client;file");
     
     strcpy(recvbuffer, s_recv(client));
     printf("%s",recvbuffer);

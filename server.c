@@ -18,8 +18,6 @@ int main(int argc, char** argv) {
         
         processRequest(recvbuffer, manager, context, worker_array);
 
-        // s_send(worker_array[0],"test");
-
    }
     return 0;
 }
