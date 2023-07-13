@@ -36,11 +36,11 @@ void *checkForUpdate(void *socket){
         int rc = zmq_recv(socket, recvbuffer, MAXLEN, 0);
         if(rc == -1 && zmq_errno() == EAGAIN){
             printf("Timeout occured\n");
-            return;
+            return 0;
             //remove from database/worker_array
         }else{
             printf("Received: %s\n", recvbuffer);
-            s_send(socket, "Received update");
+            // s_send(socket, "Received update");
         }
     }     
 }
