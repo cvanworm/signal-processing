@@ -1,4 +1,5 @@
 #include "worker.h"
+#include <pthread.h>
 
 #define MAXWORKERS 10
 
@@ -46,6 +47,17 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             //sleep(1);
             s_send(worker_array[idx], "Worker populated");
+
+            pthread_t thread_id;
+            pthread_create(&thread_id, NULL, checkForUpdate, worker_array[idx]);
+            int ret = pthread_detach(thread_id);
+            if(ret != 0){
+                printf("Error occured with thread.");
+                exit(0);
+            }
+            else{
+                printf("Thread detached");
+            }
             
         }
         // After doing some work, the worker will send an update on its system details
@@ -64,6 +76,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             //printf("Update received\n");
             sprintf(sendbuffer, "Update recieved");
             s_send(socket, sendbuffer);
+
 
             s_send(worker_array[0], "test");
         }
@@ -116,13 +129,13 @@ int populate_workers(
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     // printf("(manager, worker) = (%s, %s)\n", host, worker_addr);
     void* worker = connect_socket(context, worker_addr);
+    
     //check if socket returned NULL
     if (worker == NULL){
     
     	printf("ERROR 1 Failed to connect to server.");
     	zmq_close(worker);
     	zmq_ctx_destroy(context);
-    	
     }
 
     // connected, to assign worker to array

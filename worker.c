@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
         strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);
 
+        //Create thread that sends heartbeat to manager every 30 seconds
         pthread_t thread_id;
         pthread_create(&thread_id, NULL, updateManager, public);
         int ret = pthread_detach(thread_id);
