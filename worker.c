@@ -51,8 +51,9 @@ int main(int argc, char** argv) {
 
     while(1){
         strcpy(recvbuffer, s_recv(worker));
-        printf("%s\n",recvbuffer);
+        
         if(strcmp(recvbuffer, "Worker populated")==0){
+            printf("%s\n",recvbuffer);
             //Create thread that sends heartbeat to manager every 30 seconds
             pthread_t thread_id;
             pthread_create(&thread_id, NULL, updateManager, worker);

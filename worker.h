@@ -40,6 +40,7 @@ void *checkForUpdate(void *socket){
                 printf("work\n");
                 s_send(socket, "work");
             }
+            i++;
         }
     }     
 }
