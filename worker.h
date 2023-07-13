@@ -34,9 +34,12 @@ void *checkForUpdate(void *socket){
             //remove from database/worker_array
             return 0;
             
-        }else{
-            int numTokens;
-            char **header = splitStringOnSemiColons(recvbuffer, &numTokens);
+        }
+
+        int numTokens;
+        char **header = splitStringOnSemiColons(recvbuffer, &numTokens);
+            
+        if(strcmp(header[0], "worker")==0){
             // char *command = "python3";
             // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
 
