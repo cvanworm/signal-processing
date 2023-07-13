@@ -13,10 +13,13 @@ void *updateManager(void *input){
         sleep(1);
         // printf("Thread loop\n");
         char str[MAXLEN];
+        printf("1");
         char *sys = systemDetails();
+        printf("2");
         char host[55];
         gethostname(host, sizeof(host));
         host[MAXLEN - 1] = '\0';
+        printf("3");
 
         sprintf(str, "worker;checkin;%s;%s", host, sys);
         printf("%s",str);
