@@ -44,20 +44,20 @@ int main(int argc, char** argv) {
         strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);
 
-        //Create thread that sends heartbeat to manager every 30 seconds
-        pthread_t thread_id;
-        pthread_create(&thread_id, NULL, updateManager, public);
-        int ret = pthread_detach(thread_id);
-        if(ret != 0){
-            printf("Error occured with thread.");
-            exit(0);
-        }
-        else{
-            printf("Thread detached");
-        }
-
+        zmq_close(public);
     //Attempt to bind to private socket
     void *worker = bind_socket(context, "tcp://*:8888");
+    //Create thread that sends heartbeat to manager every 30 seconds
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, updateManager, worker);
+    int ret = pthread_detach(thread_id);
+    if(ret != 0){
+        printf("Error occured with thread.");
+        exit(0);
+    }
+    else{
+        printf("Thread detached");
+    }
     while(1){
         strcpy(recvbuffer, s_recv(worker));
         printf("%s\n",recvbuffer);
@@ -66,7 +66,6 @@ int main(int argc, char** argv) {
    
 
     //Closes socket and context
-    zmq_close(public);
     zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;

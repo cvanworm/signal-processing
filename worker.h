@@ -10,7 +10,7 @@ char* systemDetails();
 void *updateManager(void *socket){
     printf("Thread created\n");
     while(1){
-        sleep(30);
+        sleep(5);
         char str[MAXLEN];
         char recvbuffer [MAXLEN];
         char *sys = systemDetails();
