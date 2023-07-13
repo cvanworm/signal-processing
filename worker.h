@@ -11,8 +11,8 @@ void *updateManager(void *input){
     printf("Thread created\n");
     while(1){
         sleep(30);
-        // printf("Thread loop\n");
         char str[MAXLEN];
+        char recvbuffer [MAXLEN];
         //printf("1"\n);
         char *sys = systemDetails();
         //printf("2\n");
@@ -22,8 +22,12 @@ void *updateManager(void *input){
         //printf("3\n");
 
         sprintf(str, "worker;update;%s;%s", host, sys);
-        printf("%s\n",str);
+        //printf("%s\n",str);
         s_send(input,str);
+        strcpy(recvbuffer, s_recv(input));
+
+        printf("%s\n",recvbuffer);
+
         
     }
 

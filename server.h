@@ -46,9 +46,6 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             //sleep(1);
             s_send(worker_array[idx], "Worker populated");
-
-
-            
             
         }
         // After doing some work, the worker will send an update on its system details
@@ -64,9 +61,9 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             // sleep(1);
 
-            printf("Update received\n");
-            // sprintf(sendbuffer, "Update recieved");
-            // s_send(socket, sendbuffer);
+            //printf("Update received\n");
+            sprintf(sendbuffer, "Update recieved");
+            s_send(socket, sendbuffer);
         }
     }
     else if (strcmp(header[0], "client") == 0)
