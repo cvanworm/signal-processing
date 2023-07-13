@@ -36,11 +36,6 @@ void* connect_socket(void *context, const char *address){
 	int buffer_size = FILE_CHUNK_SIZE * 10;
 	zmq_setsockopt(socket, ZMQ_SNDBUF, &buffer_size, sizeof(buffer_size));
 
-    int timeout = 6000; // 5 sec
-    int opt = zmq_setsockopt(socket, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
-    if(opt == -1){
-        printf("Error setting opt");
-    }
 	
 	//attempt to connect socket to provided server
 	int rc = zmq_connect(socket, address);
