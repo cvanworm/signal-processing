@@ -35,6 +35,8 @@ void *checkForUpdate(void *socket){
             return 0;
             
         }else{
+            int numTokens;
+            char **header = splitStringOnSemiColons(recvbuffer, &numTokens);
             // char *command = "python3";
             // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
 
@@ -44,7 +46,7 @@ void *checkForUpdate(void *socket){
             //     execvp(command, arguments);
             // }
             // sleep(1);
-            printf("Received update\n");
+            printf("Received update from header[3]\n");
         }
     }     
 }
