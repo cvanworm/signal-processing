@@ -19,6 +19,7 @@ void *updateManager(void *socket){
         host[MAXLEN - 1] = '\0';
 
         sprintf(str, "worker;update;%s;%s", host, sys);
+
         s_send(socket,str);
         strcpy(recvbuffer, s_recv(socket));
 
@@ -36,6 +37,7 @@ void *checkForUpdate(void *socket){
             //remove from database/worker_array
         }else{
             printf("Received update\n");
+            s_send(socket, "Received update");
         }
     }     
 }
