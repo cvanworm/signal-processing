@@ -13,16 +13,12 @@ void *updateManager(void *input){
         sleep(2);
         char str[MAXLEN];
         char recvbuffer [MAXLEN];
-        //printf("1"\n);
         char *sys = systemDetails();
-        //printf("2\n");
         char host[55];
         gethostname(host, sizeof(host));
         host[MAXLEN - 1] = '\0';
-        //printf("3\n");
 
         sprintf(str, "worker;update;%s;%s", host, sys);
-        //printf("%s\n",str);
         s_send(input,str);
         strcpy(recvbuffer, s_recv(input));
 
@@ -33,11 +29,11 @@ void *updateManager(void *input){
 
 void checkForUpdate(){
     while(1){
+        sleep(35);
         if(1){
             //remove worker from db
             return;
         }
-        sleep(35);
     }
         
 }
