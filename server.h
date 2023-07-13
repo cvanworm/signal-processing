@@ -64,8 +64,9 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             // sleep(1);
 
-            sprintf(sendbuffer, "Update recieved");
-            s_send(socket, sendbuffer);
+            printf("Update received");
+            // sprintf(sendbuffer, "Update recieved");
+            // s_send(socket, sendbuffer);
         }
     }
     else if (strcmp(header[0], "client") == 0)

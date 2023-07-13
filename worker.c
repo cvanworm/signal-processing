@@ -28,34 +28,29 @@ int main(int argc, char** argv) {
     	
     }
 
-    //Calculates system details to send to public
-        // float upTime = 0;
-        // float loadAvg = 0;
-        // float memInUse;
-        // float totalMem;
-        // float freeMem;
-        char *sys;
         char str [MAXLEN];
         char recvbuffer[MAXLEN];
 
-        // getMemoryDetail(&memInUse, &totalMem, &freeMem);
-        // long numCores = sysconf(_SC_NPROCESSORS_ONLN);
+        //Calculates system details to send to public
+        char *sys = systemDetails();
 
-        // sprintf(str, "worker;checkin;%s;%s;%li;%f;%f;%f;%f","10.10.40.35", host, numCores, freeMem, upTime, memInUse, loadAvg);
-
-        sys = systemDetails();
-
-        printf("%s\n",sys);
 
         sprintf(str, "worker;checkin;%s;%s;%s", "10.10.40.35",host, sys);
 
         free(sys);
-        
+
         s_send(public,str);
-
-
+        
         strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);
+
+        pthread_t thread_id;
+        pthread_create(&thread_id, NULL, updateManager, public);
+        int ret = pthread_detach(thread_id);
+        if(ret != 0){
+            printf("Error occured with thread.");
+            exit(0);
+        }
 
         zmq_close(public);
 

@@ -5,13 +5,32 @@
 #include "socket.h"
 
 #define MAXLEN 512
+char* systemDetails();
 
-void updateManager(void *pubSock){
+void *updateManager(void *pubSock){
+    while(1){
+        sleep(5);
+        char str[MAXLEN];
+        char *sys = systemDetails();
+        char host[55];
+        gethostname(host, sizeof(host));
+        host[MAXLEN - 1] = '\0';
 
+        sprintf(str, "worker;checkin;%s;%s", host, sys);
+        s_send(pubSock,str);
+        
+    }
 }
 
 void checkForUpdate(){
-
+    while(1){
+        if(1){
+            //remove worker from db
+            return;
+        }
+        sleep(35);
+    }
+        
 }
 
 char* systemDetails(){
