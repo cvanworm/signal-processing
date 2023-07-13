@@ -55,9 +55,6 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
                 printf("Error occured with thread.");
                 exit(0);
             }
-            else{
-                printf("Thread detached\n");
-            }
             
         }
         // After doing some work, the worker will send an update on its system details

@@ -51,6 +51,7 @@ int main(int argc, char** argv) {
 
     while(1){
         strcpy(recvbuffer, s_recv(worker));
+        printf("%s\n",recvbuffer);
         if(strcmp(recvbuffer, "Worker populated")){
             //Create thread that sends heartbeat to manager every 30 seconds
             pthread_t thread_id;
@@ -59,9 +60,6 @@ int main(int argc, char** argv) {
             if(ret != 0){
                 printf("Error occured with thread.");
                 exit(0);
-            }
-            else{
-                printf("Thread detached\n");
             }
         }else if(strcmp(recvbuffer, "work")){
             printf("work");
