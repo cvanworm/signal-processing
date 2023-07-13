@@ -10,7 +10,7 @@ char* systemDetails();
 void *updateManager(void *socket){
     printf("Thread created\n");
     while(1){
-        sleep(5);
+        sleep(1);
         char str[MAXLEN];
         char recvbuffer [MAXLEN];
         char *sys = systemDetails();
@@ -34,6 +34,8 @@ void *checkForUpdate(void *socket){
         if(rc == -1 && zmq_errno() == EAGAIN){
             printf("Timeout occured\n");
             //remove from database/worker_array
+        }else{
+            printf("Received update\n");
         }
     }     
 }

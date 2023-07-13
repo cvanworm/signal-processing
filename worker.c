@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
         exit(0);
     }
     else{
-        printf("Thread detached");
+        printf("Thread detached\n");
     }
     while(1){
         strcpy(recvbuffer, s_recv(worker));

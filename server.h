@@ -56,7 +56,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
                 exit(0);
             }
             else{
-                printf("Thread detached");
+                printf("Thread detached\n");
             }
             
         }
