@@ -43,13 +43,16 @@ int main(int argc, char** argv) {
 
         // sprintf(str, "worker;checkin;%s;%s;%li;%f;%f;%f;%f","10.10.40.35", host, numCores, freeMem, upTime, memInUse, loadAvg);
 
-        systemDetails(&sys);
+        sys = systemDetails();
 
         printf("%s\n",sys);
 
         sprintf(str, "worker;checkin;%s;%s;%s", "10.10.40.35",host, sys);
 
+        free(sys);
+        
         s_send(public,str);
+
 
         strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);

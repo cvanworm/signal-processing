@@ -14,15 +14,18 @@ void checkForUpdate(){
 
 }
 
-void systemDetails(char** str){
+char* systemDetails(){
     float upTime = 0;
     float loadAvg = 0;
     float memInUse;
     float totalMem;
-    float freeMem; 
+    float freeMem;
+    char* str = malloc(255 * sizeof(char));  
 
     getMemoryDetail(&memInUse, &totalMem, &freeMem);
     long numCores = sysconf(_SC_NPROCESSORS_ONLN);
 
-    sprintf(*str, "%li;%f;%f;%f;%f",numCores, freeMem, upTime, memInUse, loadAvg);
+    sprintf(str, "%li;%f;%f;%f;%f",numCores, freeMem, upTime, memInUse, loadAvg);
+
+    return str;
 }
