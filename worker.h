@@ -26,6 +26,7 @@ void *updateManager(void *socket){
 }
 
 void *checkForUpdate(void *socket){
+    int i = 0;
     while(1){
         char recvbuffer[MAXLEN];
         int rc = zmq_recv(socket, recvbuffer, MAXLEN, 0);
@@ -34,8 +35,11 @@ void *checkForUpdate(void *socket){
             return 0;
             //remove from database/worker_array
         }else{
-            printf("Received: %s\n", recvbuffer);
-            // s_send(socket, "Received update");
+            printf("Received update\n");
+            if(i%2 == 0){
+                printf("work\n");
+                s_send(socket, "work");
+            }
         }
     }     
 }

@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
                 exit(0);
             }
         }else if(strcmp(recvbuffer, "work")==0){
-            printf("work");
+            printf("work\n");
         }
         
     }
