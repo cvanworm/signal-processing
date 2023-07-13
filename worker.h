@@ -10,7 +10,7 @@ char* systemDetails();
 void *updateManager(void *input){
     printf("Thread created\n");
     while(1){
-        sleep(1);
+        sleep(5);
         // printf("Thread loop\n");
         char str[MAXLEN];
         //printf("1"\n);

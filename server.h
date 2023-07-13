@@ -64,7 +64,7 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             // }
             // sleep(1);
 
-            printf("Update received");
+            printf("Update received\n");
             // sprintf(sendbuffer, "Update recieved");
             // s_send(socket, sendbuffer);
         }
