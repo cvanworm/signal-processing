@@ -29,20 +29,24 @@ int main(int argc, char** argv) {
     }
 
     //Calculates system details to send to public
-        // float upTime = 0;
-        // float loadAvg = 0;
-        // float memInUse;
-        // float totalMem;
-        // float freeMem;
+        float upTime = 0;
+        float loadAvg = 0;
+        float memInUse;
+        float totalMem;
+        float freeMem;
         char str [MAXLEN];
         char recvbuffer[MAXLEN];
 
-        // getMemoryDetail(&memInUse, &totalMem, &freeMem);
-        // long numCores = sysconf(_SC_NPROCESSORS_ONLN);
+        getMemoryDetail(&memInUse, &totalMem, &freeMem);
+        long numCores = sysconf(_SC_NPROCESSORS_ONLN);
 
-        char *sys = systemDetails();
+        sprintf(str, "worker;checkin;%s;%s;%li;%f;%f;%f;%f","10.10.40.35", host, numCores, freeMem, upTime, memInUse, loadAvg);
 
-        sprintf(str, "worker;checkin;%s;%s;%s", "10.10.40.35",host, sys);
+        // char *sys = systemDetails();
+
+        // printf("%s\n",sys);
+
+        // sprintf(str, "worker;checkin;%s;%s;%s", "10.10.40.35",host, sys);
 
         s_send(public,str);
 
