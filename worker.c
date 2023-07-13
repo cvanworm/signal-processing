@@ -64,6 +64,7 @@ int main(int argc, char** argv) {
             }
         }else if(strcmp(recvbuffer, "work")==0){
             printf("work\n");
+            s_send(worker, "Finished Work");
         }
         
     }
