@@ -11,14 +11,15 @@ void *updateManager(void *input){
     printf("Thread created\n");
     while(1){
         sleep(1);
-        printf("Thread loop\n");
-        // char str[MAXLEN];
-        // char *sys = systemDetails();
-        // char host[55];
-        // gethostname(host, sizeof(host));
-        // host[MAXLEN - 1] = '\0';
+        // printf("Thread loop\n");
+        char str[MAXLEN];
+        char *sys = systemDetails();
+        char host[55];
+        gethostname(host, sizeof(host));
+        host[MAXLEN - 1] = '\0';
 
-        // sprintf(str, "worker;checkin;%s;%s", host, sys);
+        sprintf(str, "worker;checkin;%s;%s", host, sys);
+        printf("%s",str);
         // s_send((void *)input,str);
         
     }
