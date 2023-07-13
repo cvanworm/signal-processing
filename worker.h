@@ -8,6 +8,7 @@
 char* systemDetails();
 
 void *updateManager(void *pubSock){
+    printf("Thread created");
     while(1){
         sleep(5);
         char str[MAXLEN];

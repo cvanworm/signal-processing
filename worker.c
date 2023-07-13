@@ -51,6 +51,9 @@ int main(int argc, char** argv) {
             printf("Error occured with thread.");
             exit(0);
         }
+        else{
+            printf("Thread detached");
+        }
 
         zmq_close(public);
 
