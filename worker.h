@@ -9,8 +9,9 @@ char* systemDetails();
 
 void *updateManager(void *socket){
     printf("Thread created\n");
-    while(1){
-        sleep(1);
+    int i;
+    while(i<4){
+        sleep(5);
         char str[MAXLEN];
         char recvbuffer [MAXLEN];
         char *sys = systemDetails();
@@ -24,6 +25,7 @@ void *updateManager(void *socket){
         strcpy(recvbuffer, s_recv(socket));
 
         printf("%s\n",recvbuffer);
+        i++;
     }
 
 }
