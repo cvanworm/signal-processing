@@ -61,25 +61,25 @@ void processRequest(char *request, void *socket, void *context, void **worker_ar
             
         }
         // After doing some work, the worker will send an update on its system details
-        else if (strcmp(header[1], "update") == 0)
-        {
-            // char *command = "python3";
-            // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
+        // else if (strcmp(header[1], "update") == 0)
+        // {
+        //     // char *command = "python3";
+        //     // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
 
-            // int pid = fork();
-            // if (pid == 0)
-            // {
-            //     execvp(command, arguments);
-            // }
-            // sleep(1);
+        //     // int pid = fork();
+        //     // if (pid == 0)
+        //     // {
+        //     //     execvp(command, arguments);
+        //     // }
+        //     // sleep(1);
 
-            //printf("Update received\n");
-            sprintf(sendbuffer, "Update recieved");
-            s_send(socket, sendbuffer);
+        //     //printf("Update received\n");
+        //     sprintf(sendbuffer, "Update recieved");
+        //     s_send(socket, sendbuffer);
 
 
-            s_send(worker_array[0], "test");
-        }
+        //     s_send(worker_array[0], "test");
+        // }
     }
     else if (strcmp(header[0], "client") == 0)
     {

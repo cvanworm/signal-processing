@@ -38,7 +38,7 @@ void *checkForUpdate(void *socket){
             printf("Timeout occured\n");
             //remove from database/worker_array
         }else{
-            printf("Received update\n");
+            printf("Received: %s\n", recvbuffer);
             s_send(socket, "Received update");
         }
     }     
