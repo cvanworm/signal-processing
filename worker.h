@@ -9,11 +9,10 @@ char* systemDetails();
 
 void *updateManager(void *socket){
     printf("Thread created\n");
-    int i;
-    while(i<4){
+    
+    while(1){
         sleep(5);
         char str[MAXLEN];
-        char recvbuffer [MAXLEN];
         char *sys = systemDetails();
         char host[55];
         gethostname(host, sizeof(host));
@@ -22,10 +21,6 @@ void *updateManager(void *socket){
         sprintf(str, "worker;update;%s;%s", host, sys);
 
         s_send(socket,str);
-        // strcpy(recvbuffer, s_recv(socket));
-
-        // printf("%s\n",recvbuffer);
-        i++;
     }
 
 }
