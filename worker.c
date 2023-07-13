@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     while(1){
         strcpy(recvbuffer, s_recv(worker));
         printf("%s\n",recvbuffer);
-        if(strcmp(recvbuffer, "Worker populated")){
+        if(strcmp(recvbuffer, "Worker populated")==0){
             //Create thread that sends heartbeat to manager every 30 seconds
             pthread_t thread_id;
             pthread_create(&thread_id, NULL, updateManager, worker);
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
                 printf("Error occured with thread.");
                 exit(0);
             }
-        }else if(strcmp(recvbuffer, "work")){
+        }else if(strcmp(recvbuffer, "work")==0){
             printf("work");
         }
         
