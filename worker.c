@@ -55,8 +55,6 @@ int main(int argc, char** argv) {
         //     printf("Thread detached");
         // }
 
-        zmq_close(public);
-
     //Attempt to bind to private socket
     void *worker = bind_socket(context, "tcp://*:8888");
     while(1){
@@ -67,6 +65,7 @@ int main(int argc, char** argv) {
    
 
     //Closes socket and context
+    zmq_close(public);
     zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;

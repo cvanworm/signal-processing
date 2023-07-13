@@ -26,6 +26,7 @@ void *updateManager(void *input){
         s_send(input,str);
         
     }
+
 }
 
 void checkForUpdate(){
