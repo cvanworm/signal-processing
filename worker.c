@@ -34,10 +34,12 @@ int main(int argc, char** argv) {
         //Calculates system details to send to public
         char *sys = systemDetails();
 
-        printf("%s\n",sys);
+        // printf("%s\n",sys);
 
         sprintf(str, "worker;checkin;%s;%s;%s", "10.10.40.35",host, sys);
 
+        printf("%s\n",str);
+        
         free(sys);
 
         s_send(public,str);
