@@ -7,8 +7,8 @@
 #define MAXLEN 512
 char* systemDetails();
 
-void *updateManager(void *pubSock){
-    printf("Thread created");
+void *updateManager(void *input){
+    printf("Thread created\n");
     while(1){
         sleep(5);
         char str[MAXLEN];
@@ -18,7 +18,7 @@ void *updateManager(void *pubSock){
         host[MAXLEN - 1] = '\0';
 
         sprintf(str, "worker;checkin;%s;%s", host, sys);
-        s_send(pubSock,str);
+        s_send((void *)input,str);
         
     }
 }

@@ -46,14 +46,14 @@ int main(int argc, char** argv) {
 
         pthread_t thread_id;
         pthread_create(&thread_id, NULL, updateManager, public);
-        int ret = pthread_detach(thread_id);
-        if(ret != 0){
-            printf("Error occured with thread.");
-            exit(0);
-        }
-        else{
-            printf("Thread detached");
-        }
+        // int ret = pthread_detach(thread_id);
+        // if(ret != 0){
+        //     printf("Error occured with thread.");
+        //     exit(0);
+        // }
+        // else{
+        //     printf("Thread detached");
+        // }
 
         zmq_close(public);
 
