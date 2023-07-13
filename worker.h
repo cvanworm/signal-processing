@@ -27,8 +27,6 @@ void *updateManager(void *input){
         strcpy(recvbuffer, s_recv(input));
 
         printf("%s\n",recvbuffer);
-
-        
     }
 
 }
