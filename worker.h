@@ -22,9 +22,9 @@ void *updateManager(void *socket){
         sprintf(str, "worker;update;%s;%s", host, sys);
 
         s_send(socket,str);
-        strcpy(recvbuffer, s_recv(socket));
+        // strcpy(recvbuffer, s_recv(socket));
 
-        printf("%s\n",recvbuffer);
+        // printf("%s\n",recvbuffer);
         i++;
     }
 
@@ -36,6 +36,7 @@ void *checkForUpdate(void *socket){
         int rc = zmq_recv(socket, recvbuffer, MAXLEN, 0);
         if(rc == -1 && zmq_errno() == EAGAIN){
             printf("Timeout occured\n");
+            return;
             //remove from database/worker_array
         }else{
             printf("Received: %s\n", recvbuffer);
