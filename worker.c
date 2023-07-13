@@ -62,9 +62,8 @@ int main(int argc, char** argv) {
 
     while(1){
         strcpy(recvbuffer, s_recv(worker));
-        
         if(strcmp(recvbuffer, "work")){
-            s_send(worker, "Finished work");
+            // s_send(worker, "Finished work");
         }else{
             printf("%s\n",recvbuffer);
         }
