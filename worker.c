@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     //Attempt to bind to private socket
     void *worker = bind_socket(context, "tcp://*:8888");
 
-    void *hb = bind_socket(context, "tcp://*:8888");
+    void *hb = bind_socket(context, "tcp://*:5555");
 
     while(1){
        

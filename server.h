@@ -116,6 +116,8 @@ int populate_workers(
     	zmq_close(worker);
     }
 
+    port = 5555
+    sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     void* hb = connect_socket(context, worker_addr);
 
     int timeout = 7000; // 40 sec
