@@ -7,7 +7,8 @@ int populate_workers(
     int *p_n_workers,
     int *worker_idx,
     void *context,
-    char *worker_ip
+    char *worker_ip,
+    char *host
 );
 
 //void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
@@ -37,7 +38,7 @@ void* processRequest(void* args)
             s_send(socket, "Checkin Recieved");
             
             printf("Checkin recieved: populating worker\n");
-            if(populate_workers(worker_array, &n_workers, &idx, context, header[2])) {
+            if(populate_workers(worker_array, &n_workers, &idx, context, header[2], header[3])) {
                 exit(1);
             }
              // char *command = "python3";
@@ -92,7 +93,8 @@ int populate_workers(
     int *p_n_workers,
     int *worker_idx,
     void *context,
-    char *worker_ip
+    char *worker_ip,
+    char *host
 ) {
     //printf("IP: %s\n", worker_ip);
     int n_workers = getNumberElements(worker_array);
@@ -105,9 +107,9 @@ int populate_workers(
 
     int port = 8888;
     char worker_addr[MAXLEN];
-    char host[55];
-    gethostname(host, sizeof(host));
-    host[MAXLEN - 1] = '\0';
+    // char host[55];
+    // gethostname(host, sizeof(host));
+    // host[MAXLEN - 1] = '\0';
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     // printf("(manager, worker) = (%s, %s)\n", host, worker_addr);
     void* worker = connect_socket(context, worker_addr);

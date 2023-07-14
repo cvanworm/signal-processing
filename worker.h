@@ -79,7 +79,7 @@ void *checkForUpdate(void* args){
             //     execvp(command, arguments);
             // }
             // sleep(1);
-            printf("Received update from %s\n", header[2]);
+            printf("Received update from %s\n", host);
         }else{
             printf("Error, not an update\n");
             return 0;
