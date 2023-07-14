@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     void *worker = bind_socket(context, "tcp://*:8888");
 
     while(1){
-        pthread_mutex_lock(&mutex);
+       
         strcpy(recvbuffer, s_recv(worker));
         
         if(strcmp(recvbuffer, "Worker populated")==0){
@@ -64,10 +64,12 @@ int main(int argc, char** argv) {
                 exit(0);
             }
         }else if(strcmp(recvbuffer, "work")==0){
+             pthread_mutex_lock(&mutex);
             printf("work\n");
             s_send(worker, "Finished Work");
+            pthread_mutex_unlock(&mutex);
         }
-        pthread_mutex_unlock(&mutex);
+        
         
     }
    
