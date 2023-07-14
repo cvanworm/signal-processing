@@ -49,8 +49,10 @@ void* processRequest(void* args)
             //     execvp(command, arguments);
             // }
             //sleep(1);
-            printf("Index of worker: %d\n", idx);
+            
             s_send(worker_array[idx].work, "Worker populated");
+
+            printf("host stored: %s\n", worker_array[idx].host);
 
             //Creates thread to check for worker heartbeat
             struct ThreadArgs args;
