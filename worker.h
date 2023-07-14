@@ -22,7 +22,7 @@ void *updateManager(void *socket){
     printf("Thread created\n");
     
     while(1){
-        sleep(5);
+        sleep(30);
         char str[MAXLEN];
         char *sys = systemDetails();
         char host[55];

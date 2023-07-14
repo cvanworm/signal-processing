@@ -1,6 +1,8 @@
 #include <pthread.h>
 #include "worker.h"
 
+pthread_mutex_t mutex; // Declare a mutex variable
+
 void do_work(char *input, char *output);
 
 int main(int argc, char** argv) {
@@ -48,6 +50,7 @@ int main(int argc, char** argv) {
     void *worker = bind_socket(context, "tcp://*:8888");
 
     while(1){
+        pthread_mutex_lock(&mutex);
         strcpy(recvbuffer, s_recv(worker));
         
         if(strcmp(recvbuffer, "Worker populated")==0){
@@ -64,6 +67,7 @@ int main(int argc, char** argv) {
             printf("work\n");
             s_send(worker, "Finished Work");
         }
+        pthread_mutex_unlock(&mutex);
         
     }
    

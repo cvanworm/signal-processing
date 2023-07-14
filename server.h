@@ -22,6 +22,8 @@ int populate_workers(
     char *worker_ip
 );
 
+
+
 //void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
 void* processRequest(void* args)
 {
@@ -123,7 +125,7 @@ int populate_workers(
     // printf("(manager, worker) = (%s, %s)\n", host, worker_addr);
     void* worker = connect_socket(context, worker_addr);
 
-    int timeout = 6000; // 5 sec
+    int timeout = 40000; // 40 sec
     int opt = zmq_setsockopt(worker, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
     if(opt == -1){
         printf("Error setting opt");
