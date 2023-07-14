@@ -6,8 +6,8 @@
 #include "socket.h"
 
 #define MAXLEN 512
-pthread_mutex_t mutex; // Declare a mutex variable
-int shouldPause = 0;
+// pthread_mutex_t mutex; // Declare a mutex variable
+// int shouldPause = 0;
 
 struct ThreadArgs {
     char* buffer;
@@ -24,16 +24,6 @@ void close_worker(struct workers* worker_array, char *host);
 void *updateManager(void *socket){
     printf("Thread created\n");
     while(1){
-        pthread_mutex_lock(&mutex);
-
-        // Check if the thread should be paused
-        while (shouldPause) {
-            pthread_mutex_unlock(&mutex);
-            // Thread is paused
-            pthread_mutex_lock(&mutex);
-        }
-
-        pthread_mutex_unlock(&mutex);
 
         // Send heartbeat every 30 sec
         sleep(30);
@@ -60,16 +50,6 @@ void *checkForUpdate(void* args){
 
 
     while(1){
-        pthread_mutex_lock(&mutex);
-
-        // Check if the thread should be paused
-        while (shouldPause) {
-            pthread_mutex_unlock(&mutex);
-            // Thread is paused
-            pthread_mutex_lock(&mutex);
-        }
-
-        pthread_mutex_unlock(&mutex);
 
         // Check for updates from worker
         char recvbuffer[MAXLEN];
@@ -102,6 +82,7 @@ void *checkForUpdate(void* args){
             printf("Received update from %s\n", header[2]);
         }else{
             printf("Error, not an update\n");
+            return 0;
         }
     }     
 }

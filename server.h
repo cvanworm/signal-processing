@@ -72,11 +72,6 @@ void* processRequest(void* args)
     {
         if (strcmp(header[1], "file") == 0)
         {
-            // Pause the thread
-            pthread_mutex_lock(&mutex);
-            shouldPause = 1;
-            pthread_mutex_unlock(&mutex);
-
             s_send(worker_array[0].sock, "work");
             //update database and show work is in progress
             
@@ -84,10 +79,6 @@ void* processRequest(void* args)
             printf("%s\n", recvbuffer);
             s_send(socket, recvbuffer);
 
-            // Pause the thread
-            pthread_mutex_lock(&mutex);
-            shouldPause = 0;
-            pthread_mutex_unlock(&mutex);
         }
     }
     free(header);
