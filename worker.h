@@ -5,8 +5,19 @@
 #include "socket.h"
 
 #define MAXLEN 512
-char* systemDetails();
 
+struct ThreadArgs {
+    char* buffer;
+    void* socket;
+    void* context;
+    char* host;
+    struct workers* w_arr;
+};
+
+char* systemDetails();
+void close_worker(struct workers* worker_array, char *host);
+
+//Grabs system details to sent to update manager: HEARTBEAT
 void *updateManager(void *socket){
     printf("Thread created\n");
     
@@ -25,13 +36,22 @@ void *updateManager(void *socket){
 
 }
 
-void *checkForUpdate(void *socket){
+//Updates DB if heartbeat is received
+//Removes from DB if none is found
+void *checkForUpdate(void* args){
+    struct ThreadArgs* myArgs = (struct ThreadArgs*)args;
+    char *host = myArgs->host;
+    void *socket = myArgs->socket;
+    struct workers* worker_array = myArgs->w_arr;
+
+
     while(1){
         char recvbuffer[MAXLEN];
         int rc = zmq_recv(socket, recvbuffer, MAXLEN, 0);
         if(rc == -1 && zmq_errno() == EAGAIN){
-            printf("Timeout occured\n");
+            printf("Timeout occured on %s\n", host);
             //remove from database/worker_array
+            //close_worker(worker_array, host);
             return 0;
             
         }
@@ -68,4 +88,15 @@ char* systemDetails(){
     sprintf(str, "%li;%f;%f;%f;%f",numCores, freeMem, upTime, memInUse, loadAvg);
 
     return str;
+}
+
+void close_worker(struct workers* worker_array, char *host) {
+    int n_workers = getNumberElements(worker_array);
+    int i;
+    for(i = 0; i < n_workers; i++) {
+        // if(strcmp(worker_array[i].host, host)==0) {
+        //     zmq_close(worker_array[i].sock);
+        //     worker_array[i] = NULL;
+        // }
+    }
 }

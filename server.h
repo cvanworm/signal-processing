@@ -10,13 +10,6 @@ struct workers {
     char *host;
 };
 
-struct ThreadArgs {
-    char* buffer;
-    void* socket;
-    void* context;
-    struct workers* w_arr;
-};
-
 int getNumberElements(struct workers* array) {
     int count = 0;
     while (array[count].sock != NULL) {
@@ -32,8 +25,6 @@ int populate_workers(
     void *context,
     char *worker_ip
 );
-
-void close_workers(void **worker_array, int n_workers);
 
 //void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
 void* processRequest(void* args)
@@ -76,8 +67,14 @@ void* processRequest(void* args)
             //sleep(1);
             s_send(worker_array[idx].sock, "Worker populated");
 
+            //Creates thread to check for worker heartbeat
+            struct ThreadArgs args;
+            args.w_arr = worker_array;
+            args.socket = worker_array[idx].sock;
+            args.host = worker_array[idx].host;
+
             pthread_t thread_id;
-            pthread_create(&thread_id, NULL, checkForUpdate, worker_array[idx].sock);
+            pthread_create(&thread_id, NULL, checkForUpdate, (void*)&args);
             int ret = pthread_detach(thread_id);
             if(ret != 0){
                 printf("Error occured with thread.");
@@ -103,16 +100,6 @@ void* processRequest(void* args)
         }
     }
     free(header);
-}
-
-void close_workers(void **worker_array, int n_workers) {
-    int i;
-    for(i = 0; i < n_workers; i++) {
-        if(worker_array[i] != NULL) {
-            zmq_close(worker_array[i]);
-            worker_array[i] = NULL;
-        }
-    }
 }
 
 int populate_workers(

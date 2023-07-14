@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     
     args.socket = manager;
     args.context = context;
-    args. w_arr = worker_array;
+    args.w_arr = worker_array;
 
     while(1){
         char recvbuffer[MAXLEN];
