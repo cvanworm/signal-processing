@@ -108,14 +108,21 @@ void close_worker(struct workers* worker_array, char *host) {
     int i;
     for(i = 0; i < n_workers; i++) {
         if(strcmp(worker_array[i].host, host)==0) {
-            struct workers temp = worker_array[i];
-            worker_array[i] = worker_array[n_workers-1];
-            worker_array[n_workers-1] = temp;
-            zmq_close(worker_array[n_workers-1].work);
-            zmq_close(worker_array[n_workers-1].hb);
-            worker_array[n_workers-1].work = NULL;
-            worker_array[n_workers-1].hb = NULL;
-            worker_array[n_workers-1].host = NULL;
+            // struct workers temp = worker_array[i];
+            zmq_close(worker_array[i].work);
+            zmq_close(worker_array[i].hb);
+            if(n_workers > 1){
+                //printf("Replacing with: %s\n", worker_array[n_workers-1].host);
+                worker_array[i] = worker_array[n_workers-1];
+                //printf("New host: %s\n", worker_array[i].host);
+            }else{
+                worker_array[n_workers-1].work = NULL;
+                worker_array[n_workers-1].hb = NULL;
+                worker_array[n_workers-1].host = NULL;
+            }
+
+            printf("Final host: %s\n", worker_array[i].host);
+            
         }
     }
 }
