@@ -3,9 +3,18 @@
 
 #define MAXWORKERS 10
 
+pthread_mutex_t mutex; // Declare a mutex variable
+
 struct workers {
     void *sock;
     char *host;
+};
+
+struct ThreadArgs {
+    char* buffer;
+    void* socket;
+    void* context;
+    struct workers* w_arr;
 };
 
 int getNumberElements(struct workers* array) {
@@ -26,8 +35,15 @@ int populate_workers(
 
 void close_workers(void **worker_array, int n_workers);
 
-void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
+//void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
+void* processRequest(void* args)
 {
+    struct ThreadArgs* myArgs = (struct ThreadArgs*)args;
+    char *request = myArgs->buffer;
+    void *socket = myArgs->socket;
+    void *context = myArgs->context;
+    struct workers* worker_array = myArgs->w_arr;
+
     char sendbuffer[MAXLEN];
     char recvbuffer[MAXLEN];
     int numTokens;
@@ -76,9 +92,13 @@ void processRequest(char *request, void *socket, void *context, struct workers* 
         if (strcmp(header[1], "file") == 0)
         {
             // This will also have to be connected with the requesting client somehow?
+            pthread_mutex_lock(&mutex);
             s_send(worker_array[0].sock, "work");
+            //update database and show work is in progress
             
             strcpy(recvbuffer, s_recv(worker_array[0].sock));
+            printf("%s\n", recvbuffer);
+            pthread_mutex_unlock(&mutex);
             s_send(socket, recvbuffer);
         }
     }

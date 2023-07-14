@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     s_send(client, "client;file");
     
     strcpy(recvbuffer, s_recv(client));
-    printf("%s",recvbuffer);
+    printf("%s\n",recvbuffer);
 
     zmq_close(client);
     zmq_ctx_destroy(context);

@@ -39,8 +39,6 @@ int main(int argc, char** argv) {
         free(sys);
 
         s_send(public,str);
-
-        printf("Sent checkin");
         
         strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);

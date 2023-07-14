@@ -9,14 +9,24 @@ int main(int argc, char** argv) {
 
     struct workers worker_array[MAXWORKERS] = {NULL, };
 
+    struct ThreadArgs args;
+    
+    args.socket = manager;
+    args.context = context;
+    args. w_arr = worker_array;
+
     while(1){
         char recvbuffer[MAXLEN];
         char sendbuffer[MAXLEN];
+        pthread_t thread;
 
         strcpy(recvbuffer, s_recv(manager));
         printf("Got: %s\n", recvbuffer);
         
-        processRequest(recvbuffer, manager, context, worker_array);
+        args.buffer = recvbuffer;
+        // Create a thread and pass the arguments
+        pthread_create(&thread, NULL, processRequest, (void*)&args);
+        //processRequest(recvbuffer, manager, context, worker_array);
 
    }
     return 0;
