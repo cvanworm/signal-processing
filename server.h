@@ -94,6 +94,7 @@ int populate_workers(
     //printf("IP: %s\n", worker_ip);
     int n_workers = getNumberElements(worker_array);
     *worker_idx = n_workers;
+    printf("index to inser worker: %d", *worker_idx);
     if(n_workers > MAXWORKERS) {
         
         fprintf(stderr, "Had %d workers but the maximum is %d\n", n_workers, MAXWORKERS);
