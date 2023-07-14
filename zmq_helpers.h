@@ -8,6 +8,11 @@
 #include<wait.h>
 #include<assert.h>
 
+struct workers {
+    void *sock;
+    char *host;
+};
+
 static int addNums(int num1, int num2){ return num1 + num2; }
 static int subNums(int num1, int num2){ return num1 - num2; }
 static int mulNums(int num1, int num2){ return num1 * num2; }
@@ -253,21 +258,21 @@ char** splitStringOnSemiColons(const char* input, int* numTokens) {
     return tokens;
 }
 
-int getNumberOfElements(char** array) {
-    int count = 0;
-    while (array[count] != NULL) {
-        count++;
-    }
-    return count;
-}
-
-// int getNumberElements(struct workers* array) {
+// int getNumberOfElements(char** array) {
 //     int count = 0;
 //     while (array[count] != NULL) {
 //         count++;
 //     }
 //     return count;
 // }
+
+int getNumberElements(struct workers* array) {
+    int count = 0;
+    while (array[count].host != NULL) {
+        count++;
+    }
+    return count;
+}
 
 
 typedef int (*function_type)(int,int);

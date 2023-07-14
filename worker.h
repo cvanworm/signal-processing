@@ -51,7 +51,8 @@ void *checkForUpdate(void* args){
         if(rc == -1 && zmq_errno() == EAGAIN){
             printf("Timeout occured on %s\n", host);
             //remove from database/worker_array
-            //close_worker(worker_array, host);
+            close_worker(worker_array, host);
+            printf("Closed worker: %s\n", host);
             return 0;
             
         }
@@ -94,9 +95,13 @@ void close_worker(struct workers* worker_array, char *host) {
     int n_workers = getNumberElements(worker_array);
     int i;
     for(i = 0; i < n_workers; i++) {
-        // if(strcmp(worker_array[i].host, host)==0) {
-        //     zmq_close(worker_array[i].sock);
-        //     worker_array[i] = NULL;
-        // }
+        if(strcmp(worker_array[i].host, host)==0) {
+            struct workers temp = worker_array[i];
+            worker_array[i] = worker_array[n_workers-1];
+            worker_array[n_workers-1] = temp;
+            zmq_close(worker_array[n_workers-1].sock);
+            worker_array[n_workers-1].sock = NULL;
+            worker_array[n_workers-1].host = NULL;
+        }
     }
 }

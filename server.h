@@ -5,18 +5,14 @@
 
 pthread_mutex_t mutex; // Declare a mutex variable
 
-struct workers {
-    void *sock;
-    char *host;
-};
 
-int getNumberElements(struct workers* array) {
-    int count = 0;
-    while (array[count].sock != NULL) {
-        count++;
-    }
-    return count;
-}
+// int getNumberElements(struct workers* array) {
+//     int count = 0;
+//     while (array[count].sock != NULL) {
+//         count++;
+//     }
+//     return count;
+// }
 
 int populate_workers(
     struct workers* worker_array,
