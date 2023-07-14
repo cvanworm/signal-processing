@@ -40,6 +40,8 @@ int main(int argc, char** argv) {
         strcpy(recvbuffer, s_recv(public));
         printf("%s\n",recvbuffer);
 
+        zmq_close(public);
+
     //Attempt to bind to private socket
     void *worker = bind_socket(context, "tcp://*:8888");
 
@@ -68,7 +70,6 @@ int main(int argc, char** argv) {
    
 
     //Closes socket and context
-    zmq_close(public);
     zmq_close(worker);
     zmq_ctx_destroy(context);
     return 0;
