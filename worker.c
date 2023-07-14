@@ -45,6 +45,8 @@ int main(int argc, char** argv) {
     //Attempt to bind to private socket
     void *worker = bind_socket(context, "tcp://*:8888");
 
+    void *hb = bind_socket(context, "tcp://*:8888");
+
     while(1){
        
         strcpy(recvbuffer, s_recv(worker));
@@ -53,7 +55,7 @@ int main(int argc, char** argv) {
             printf("%s\n",recvbuffer);
             //Create thread that sends heartbeat to manager every 30 seconds
             pthread_t thread_id;
-            pthread_create(&thread_id, NULL, updateManager, worker);
+            pthread_create(&thread_id, NULL, updateManager, hb);
             int ret = pthread_detach(thread_id);
             if(ret != 0){
                 printf("Error occured with thread.");

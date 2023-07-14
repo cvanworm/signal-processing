@@ -111,8 +111,10 @@ void close_worker(struct workers* worker_array, char *host) {
             struct workers temp = worker_array[i];
             worker_array[i] = worker_array[n_workers-1];
             worker_array[n_workers-1] = temp;
-            zmq_close(worker_array[n_workers-1].sock);
-            worker_array[n_workers-1].sock = NULL;
+            zmq_close(worker_array[n_workers-1].work);
+            zmq_close(worker_array[n_workers-1].hb);
+            worker_array[n_workers-1].work = NULL;
+            worker_array[n_workers-1].hb = NULL;
             worker_array[n_workers-1].host = NULL;
         }
     }

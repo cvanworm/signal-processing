@@ -49,12 +49,12 @@ void* processRequest(void* args)
             //     execvp(command, arguments);
             // }
             //sleep(1);
-            s_send(worker_array[idx].sock, "Worker populated");
+            s_send(worker_array[idx].hb, "Worker populated");
 
             //Creates thread to check for worker heartbeat
             struct ThreadArgs args;
             args.w_arr = worker_array;
-            args.socket = worker_array[idx].sock;
+            args.socket = worker_array[idx].hb;
             args.host = worker_array[idx].host;
 
             pthread_t thread_id;
@@ -72,10 +72,10 @@ void* processRequest(void* args)
     {
         if (strcmp(header[1], "file") == 0)
         {
-            s_send(worker_array[0].sock, "work");
+            s_send(worker_array[0].work, "work");
             //update database and show work is in progress
             
-            strcpy(recvbuffer, s_recv(worker_array[0].sock));
+            strcpy(recvbuffer, s_recv(worker_array[0].work));
             printf("%s\n", recvbuffer);
             s_send(socket, recvbuffer);
 
@@ -109,22 +109,32 @@ int populate_workers(
     // printf("(manager, worker) = (%s, %s)\n", host, worker_addr);
     void* worker = connect_socket(context, worker_addr);
 
-    int timeout = 7000; // 40 sec
-    int opt = zmq_setsockopt(worker, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
-    if(opt == -1){
-        printf("Error setting opt");
-    }
-    
     //check if socket returned NULL
     if (worker == NULL){
     
     	printf("ERROR 1 Failed to connect to server.");
     	zmq_close(worker);
-    	zmq_ctx_destroy(context);
     }
 
+    void* hb = connect_socket(context, worker_addr);
+
+    int timeout = 7000; // 40 sec
+    int opt = zmq_setsockopt(hb, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
+    if(opt == -1){
+        printf("Error setting opt");
+    }
+
+    //check if socket returned NULL
+    if (hb == NULL){
+    
+    	printf("ERROR 1 Failed to connect to server.");
+    	zmq_close(hb);
+    }
+    
+
     struct workers w;
-    w.sock = worker;
+    w.work = worker;
+    w.hb = hb;
     w.host = host;
 
 

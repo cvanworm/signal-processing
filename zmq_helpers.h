@@ -9,7 +9,8 @@
 #include<assert.h>
 
 struct workers {
-    void *sock;
+    void *work;
+    void *hb;
     char *host;
 };
 
