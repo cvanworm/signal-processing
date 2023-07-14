@@ -71,6 +71,8 @@ void *checkForUpdate(void* args){
             // }
             // sleep(1);
             printf("Received update from %s\n", header[2]);
+        }else{
+            printf("Error, not an update\n");
         }
     }     
 }
