@@ -26,7 +26,7 @@ void *updateManager(void *socket){
     while(1){
 
         // Send heartbeat every 30 sec
-        sleep(30);
+        sleep(5);
         char str[MAXLEN];
         char *sys = systemDetails();
         char host[55];

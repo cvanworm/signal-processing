@@ -6,7 +6,6 @@ int findWorker(char *host, struct workers* arr);
 int populate_workers(
     struct workers* worker_array,
     int *p_n_workers,
-    int *worker_idx,
     void *context,
     char *worker_ip,
     char *host
@@ -25,7 +24,6 @@ void* processRequest(void* args)
     char recvbuffer[MAXLEN];
     int numTokens;
     int n_workers;
-    int idx;
 
     char **header = splitStringOnSemiColons(request, &numTokens);
     
@@ -39,7 +37,7 @@ void* processRequest(void* args)
             s_send(socket, "Checkin Recieved");
             
             printf("Checkin recieved: populating worker\n");
-            if(populate_workers(worker_array, &n_workers, &idx, context, header[2], header[3])) {
+            if(populate_workers(worker_array, &n_workers, context, header[2], header[3])) {
                 exit(1);
             }
              // char *command = "python3";
@@ -106,14 +104,12 @@ int findWorker(char *host, struct workers* arr){
 int populate_workers(
     struct workers* worker_array,
     int *p_n_workers,
-    int *worker_idx,
     void *context,
     char *worker_ip,
     char *host
 ) {
     //printf("IP: %s\n", worker_ip);
     int n_workers = getNumberElements(worker_array);
-    *worker_idx = n_workers;
     if(n_workers > MAXWORKERS) {
         
         fprintf(stderr, "Had %d workers but the maximum is %d\n", n_workers, MAXWORKERS);
@@ -140,7 +136,7 @@ int populate_workers(
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     void* hb = connect_socket(context, worker_addr);
 
-    int timeout = 40000; // 40 sec
+    int timeout = 7000; // 40 sec
     int opt = zmq_setsockopt(hb, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
     if(opt == -1){
         printf("Error setting opt");
@@ -161,7 +157,7 @@ int populate_workers(
 
 
     // connected, to assign worker to array
-    worker_array[*worker_idx] = w;
+    worker_array[n_workers] = w;
 
     *p_n_workers = n_workers;
     return 0;
