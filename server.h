@@ -120,7 +120,7 @@ int populate_workers(
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     void* hb = connect_socket(context, worker_addr);
 
-    int timeout = 7000; // 40 sec
+    int timeout = 10000; // 40 sec
     int opt = zmq_setsockopt(hb, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
     if(opt == -1){
         printf("Error setting opt");
