@@ -49,7 +49,8 @@ void* processRequest(void* args)
             //     execvp(command, arguments);
             // }
             //sleep(1);
-            s_send(worker_array[idx].hb, "Worker populated");
+            printf("Index of worker: %d\n", idx);
+            s_send(worker_array[idx].work, "Worker populated");
 
             //Creates thread to check for worker heartbeat
             struct ThreadArgs args;
@@ -94,7 +95,6 @@ int populate_workers(
     //printf("IP: %s\n", worker_ip);
     int n_workers = getNumberElements(worker_array);
     *worker_idx = n_workers;
-    printf("index to inser worker: %d", *worker_idx);
     if(n_workers > MAXWORKERS) {
         
         fprintf(stderr, "Had %d workers but the maximum is %d\n", n_workers, MAXWORKERS);
@@ -121,7 +121,7 @@ int populate_workers(
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     void* hb = connect_socket(context, worker_addr);
 
-    int timeout = 10000; // 40 sec
+    int timeout = 7000; // 40 sec
     int opt = zmq_setsockopt(hb, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));
     if(opt == -1){
         printf("Error setting opt");
