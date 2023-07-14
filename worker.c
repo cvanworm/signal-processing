@@ -1,9 +1,4 @@
-#include <pthread.h>
 #include "worker.h"
-
-pthread_mutex_t mutex; // Declare a mutex variable
-
-void do_work(char *input, char *output);
 
 int main(int argc, char** argv) {
     //Binds socket to port
@@ -64,12 +59,19 @@ int main(int argc, char** argv) {
                 exit(0);
             }
         }else if(strcmp(recvbuffer, "work")==0){
-             pthread_mutex_lock(&mutex);
+            // Pause the thread
+            pthread_mutex_lock(&mutex);
+            shouldPause = 1;
+            pthread_mutex_unlock(&mutex);
+
             printf("work\n");
             s_send(worker, "Finished Work");
+
+            // Resume the thread
+            pthread_mutex_lock(&mutex);
+            shouldPause = 0;
             pthread_mutex_unlock(&mutex);
         }
-        
         
     }
    

@@ -1,18 +1,6 @@
 #include "worker.h"
-#include <pthread.h>
 
 #define MAXWORKERS 10
-
-pthread_mutex_t mutex; // Declare a mutex variable
-
-
-// int getNumberElements(struct workers* array) {
-//     int count = 0;
-//     while (array[count].sock != NULL) {
-//         count++;
-//     }
-//     return count;
-// }
 
 int populate_workers(
     struct workers* worker_array,
@@ -21,8 +9,6 @@ int populate_workers(
     void *context,
     char *worker_ip
 );
-
-
 
 //void processRequest(char *request, void *socket, void *context, struct workers* worker_array)
 void* processRequest(void* args)
@@ -86,15 +72,22 @@ void* processRequest(void* args)
     {
         if (strcmp(header[1], "file") == 0)
         {
-            // This will also have to be connected with the requesting client somehow?
+            // Pause the thread
             pthread_mutex_lock(&mutex);
+            shouldPause = 1;
+            pthread_mutex_unlock(&mutex);
+
             s_send(worker_array[0].sock, "work");
             //update database and show work is in progress
             
             strcpy(recvbuffer, s_recv(worker_array[0].sock));
             printf("%s\n", recvbuffer);
-            pthread_mutex_unlock(&mutex);
             s_send(socket, recvbuffer);
+
+            // Pause the thread
+            pthread_mutex_lock(&mutex);
+            shouldPause = 0;
+            pthread_mutex_unlock(&mutex);
         }
     }
     free(header);

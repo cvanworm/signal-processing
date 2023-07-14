@@ -1,10 +1,13 @@
 #include <unistd.h>
+#include <pthread.h>
 #include "sysdata.h"
 #include "zmq_helpers.h"
 #include "zmq_msgs.h"
 #include "socket.h"
 
 #define MAXLEN 512
+pthread_mutex_t mutex; // Declare a mutex variable
+int shouldPause = 0;
 
 struct ThreadArgs {
     char* buffer;
@@ -20,8 +23,19 @@ void close_worker(struct workers* worker_array, char *host);
 //Grabs system details to sent to update manager: HEARTBEAT
 void *updateManager(void *socket){
     printf("Thread created\n");
-    
     while(1){
+        pthread_mutex_lock(&mutex);
+
+        // Check if the thread should be paused
+        while (shouldPause) {
+            pthread_mutex_unlock(&mutex);
+            // Thread is paused
+            pthread_mutex_lock(&mutex);
+        }
+
+        pthread_mutex_unlock(&mutex);
+
+        // Send heartbeat every 30 sec
         sleep(30);
         char str[MAXLEN];
         char *sys = systemDetails();
@@ -46,8 +60,22 @@ void *checkForUpdate(void* args){
 
 
     while(1){
+        pthread_mutex_lock(&mutex);
+
+        // Check if the thread should be paused
+        while (shouldPause) {
+            pthread_mutex_unlock(&mutex);
+            // Thread is paused
+            pthread_mutex_lock(&mutex);
+        }
+
+        pthread_mutex_unlock(&mutex);
+
+        // Check for updates from worker
         char recvbuffer[MAXLEN];
         int rc = zmq_recv(socket, recvbuffer, MAXLEN, 0);
+
+        // If no update in 40 sec, remove worker
         if(rc == -1 && zmq_errno() == EAGAIN){
             printf("Timeout occured on %s\n", host);
             //remove from database/worker_array
@@ -59,7 +87,8 @@ void *checkForUpdate(void* args){
 
         int numTokens;
         char **header = splitStringOnSemiColons(recvbuffer, &numTokens);
-            
+        
+        // If update comes through, update DB
         if(strcmp(header[0], "worker")==0){
             // char *command = "python3";
             // char *arguments[] = {"python3", "db/update.py", header[2], header[4], header[5], header[6], header[7], NULL};
