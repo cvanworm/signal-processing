@@ -33,19 +33,22 @@ int main(int argc, char** argv) {
     while(1){
         //Attemp to recieve file path from requester
     	char path[256];
+        char sendbuffer[MAXLEN];
     	memset(path, 0, 256);
-    	zmq_recv(client, path, 256,0);
+        strcpy(path, "test.csv");
+    	// zmq_recv(client, path, 256,0);
 
         if (strlen(path) != 0){
 		//single file transfer section
 		//single file transfer will include a MD5 checksum value
-			printf("Supplicant chuck size: %d\n", FILE_CHUNK_SIZE);
+			//printf("Supplicant chuck size: %d\n", FILE_CHUNK_SIZE);
 			//calculate MD5 checksum for 
 			char checksum_str[MD5_DIGEST_LENGTH * 2 + 1];
 			if(calc_md5_sum(path, checksum_str)){
 			printf("MD5 checksum for %s: %s\n",path, checksum_str);
+            sprintf(sendbuffer, "client;checksum;%s", checksum_str);
 			//send MD5 sum to requester before we start to send it the file
-			zmq_send(client, checksum_str, sizeof(checksum_str), 0);
+			zmq_send(client, sendbuffer, sizeof(sendbuffer), 0);
 			}
 			
 			int result = send_file_to_requester(client, path);

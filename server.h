@@ -1,5 +1,6 @@
 #include "worker.h"
-
+#include "file.h"
+#include "cksum.h"
 #define MAXWORKERS 10
 
 int findWorker(char *host, struct workers* arr);
@@ -36,7 +37,7 @@ void* processRequest(void* args)
 
             s_send(socket, "Checkin Recieved");
             
-            printf("Checkin recieved: populating worker\n");
+            //printf("Checkin recieved: populating worker\n");
             if(populate_workers(worker_array, &n_workers, context, header[2], header[3])) {
                 exit(1);
             }
@@ -76,14 +77,26 @@ void* processRequest(void* args)
     }
     else if (strcmp(header[0], "client") == 0)
     {
-        if (strcmp(header[1], "file") == 0)
+        if (strcmp(header[1], "checksum") == 0)
         {
-            s_send(worker_array[0].work, "work");
-            //update database and show work is in progress
+            char received_checksum_str[MD5_DIGEST_LENGTH * 2 + 1];
+            char local_checksum_str[MD5_DIGEST_LENGTH * 2 + 1];
+            char local_path[] = "test.csv";
+            // zmq_recv(socket, &received_checksum_str, sizeof(received_checksum_str), 0);
+            strcpy(received_checksum_str, header[2]);
+            printf("MD5 checksum: %s\n", received_checksum_str);
             
-            strcpy(recvbuffer, s_recv(worker_array[0].work));
-            printf("%s\n", recvbuffer);
-            s_send(socket, recvbuffer);
+            //start receiving file
+            int result = receive_file_from_device(socket, local_path);
+            //check if file was successfully received
+            if (result!=0){printf("Failt to receive file\n");}
+            
+            //calculate MD5 checksum for received file and compare to received checksum
+            if(calc_md5_sum(local_path, local_checksum_str)){
+                //Check if checksums matched
+                if(strcmp(received_checksum_str, local_checksum_str) == 0){
+                    printf("Checksums validation complete\n");}
+                else{printf("File corrupted, Take appropriate Action\n");}}
 
         }
     }

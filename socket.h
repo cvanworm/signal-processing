@@ -18,23 +18,23 @@ void* connect_to_supplicant(void *context, const char *server_address){
 		return NULL;
 		zmq_close(socket);
 	}
-	printf("Connection succesful to server at %s\n", server_address);
+	//printf("Connection succesful to server at %s\n", server_address);
 	return socket;}
 
 	void* bind_socket(void *context, const char *server_address){
-	void *socket = zmq_socket(context, ZMQ_PAIR);
-	//check if socket was successfully created
-	if (socket == NULL){
-		printf("BS_error 1: Failed to create socket. ERROR: %s\n", zmq_strerror(zmq_errno()));
-		return NULL;}
-	
-	//attempt to bind socket
-	int rc = zmq_bind(socket, server_address);
-	//check status of bind operation
-	if (rc != 0){
-		printf("BS_error 2: Failed to bind socket. Error: %s\n", zmq_strerror(zmq_errno()));
-		return NULL;
-		zmq_close(socket);}
+		void *socket = zmq_socket(context, ZMQ_PAIR);
+		//check if socket was successfully created
+		if (socket == NULL){
+			printf("BS_error 1: Failed to create socket. ERROR: %s\n", zmq_strerror(zmq_errno()));
+			return NULL;}
+		
+		//attempt to bind socket
+		int rc = zmq_bind(socket, server_address);
+		//check status of bind operation
+		if (rc != 0){
+			printf("BS_error 2: Failed to bind socket. Error: %s\n", zmq_strerror(zmq_errno()));
+			return NULL;
+			zmq_close(socket);}
 	
 	//Return pointer to socket
 	return socket;}

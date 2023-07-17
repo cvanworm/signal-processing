@@ -22,7 +22,7 @@ void close_worker(struct workers* worker_array, char *host);
 
 //Grabs system details to sent to update manager: HEARTBEAT
 void *updateManager(void *socket){
-    printf("Thread created\n");
+    //printf("Thread created\n");
     while(1){
 
         // Send heartbeat every 30 sec
@@ -121,7 +121,7 @@ void close_worker(struct workers* worker_array, char *host) {
                 worker_array[n_workers-1].host = NULL;
             }
 
-            printf("Final host: %s\n", worker_array[i].host);
+            //printf("Final host: %s\n", worker_array[i].host);
             
         }
     }
