@@ -60,7 +60,7 @@ void *checkForUpdate(void* args){
             printf("Timeout occured on %s\n", host);
             //remove from database/worker_array
             close_worker(worker_array, host);
-            printf("Closed worker: %s\n", host);
+            //printf("Closed worker: %s\n", host);
             return 0;
             
         }
