@@ -123,7 +123,7 @@ int populate_workers(
     // host[MAXLEN - 1] = '\0';
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
     // printf("(manager, worker) = (%s, %s)\n", host, worker_addr);
-    void* worker = connect_socket(context, worker_addr);
+    void* worker = connect_to_supplicant(context, worker_addr);
 
     //check if socket returned NULL
     if (worker == NULL){
@@ -134,7 +134,7 @@ int populate_workers(
 
     port = 5555;
     sprintf(worker_addr, "tcp://%s:%d", worker_ip, port);
-    void* hb = connect_socket(context, worker_addr);
+    void* hb = connect_to_supplicant(context, worker_addr);
 
     int timeout = 7000; // 40 sec
     int opt = zmq_setsockopt(hb, ZMQ_RCVTIMEO, &timeout, sizeof(timeout));

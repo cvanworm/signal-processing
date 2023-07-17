@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     sprintf(server_addr, "tcp://%s:%d", argv[1], port);
     printf("(worker, manager) = (%s, %s)\n", host, server_addr);
     void *context=zmq_ctx_new();
-    void* public = connect_socket(context, server_addr);
+    void* public = connect_to_supplicant(context, server_addr);
     //check if socket returned NULL
     if (public == NULL){
     
