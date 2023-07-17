@@ -4,6 +4,7 @@
 #define MAXWORKERS 10
 
 int findWorker(char *host, struct workers* arr);
+void* populate_client(void *context, char *client_ip);
 int populate_workers(
     struct workers* worker_array,
     int *p_n_workers,
@@ -79,15 +80,16 @@ void* processRequest(void* args)
     {
         if (strcmp(header[1], "checksum") == 0)
         {
+            void* client = populate_client(context, header[2]);
             char received_checksum_str[MD5_DIGEST_LENGTH * 2 + 1];
             char local_checksum_str[MD5_DIGEST_LENGTH * 2 + 1];
             char local_path[] = "test.csv";
             // zmq_recv(socket, &received_checksum_str, sizeof(received_checksum_str), 0);
-            strcpy(received_checksum_str, header[2]);
+            strcpy(received_checksum_str, header[3]);
             printf("MD5 checksum: %s\n", received_checksum_str);
             
             //start receiving file
-            int result = receive_file_from_device(socket, local_path);
+            int result = receive_file_from_device(client, local_path);
             //check if file was successfully received
             if (result!=0){printf("Failt to receive file\n");}
             
@@ -97,8 +99,9 @@ void* processRequest(void* args)
                 if(strcmp(received_checksum_str, local_checksum_str) == 0){
                     printf("Checksums validation complete\n");}
                 else{printf("File corrupted, Take appropriate Action\n");}}
-
+            zmq_close(client);
         }
+        
     }
     free(header);
 }
@@ -174,4 +177,23 @@ int populate_workers(
 
     *p_n_workers = n_workers;
     return 0;
+}
+
+void* populate_client(void *context, char *client_ip) {
+
+    int port = 8888;
+    char client_addr[MAXLEN];
+    sprintf(client_addr, "tcp://%s:%d", client_ip, port);
+    // printf("(manager, worker) = (%s, %s)\n", host, worker_addr);
+    void* client = connect_to_supplicant(context, client_addr);
+
+    //check if socket returned NULL
+    if (client == NULL){
+    
+    	printf("ERROR 1 Failed to connect to server.");
+    	zmq_close(client);
+    }
+
+    return client;
+
 }

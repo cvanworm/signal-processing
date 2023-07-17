@@ -20,16 +20,17 @@ int main(int argc, char** argv) {
     sprintf(server_addr, "tcp://%s:%d", argv[1], port);
     printf("(client, manager) = (%s, %s)\n", host, server_addr);
     void *context=zmq_ctx_new();
-    void* client = connect_to_supplicant(context, server_addr);
+    void* public = connect_to_supplicant(context, server_addr);
     //check if socket returned NULL
-    if (client == NULL){
+    if (public == NULL){
     
     	printf("ERROR 1 Failed to connect to server.");
-    	zmq_close(client);
+    	zmq_close(public);
     	zmq_ctx_destroy(context);
     	
     }
 
+    void *client = bind_socket(context, "tcp://*:8888");
     while(1){
         //Attemp to recieve file path from requester
     	char path[256];
@@ -46,9 +47,9 @@ int main(int argc, char** argv) {
 			char checksum_str[MD5_DIGEST_LENGTH * 2 + 1];
 			if(calc_md5_sum(path, checksum_str)){
 			printf("MD5 checksum for %s: %s\n",path, checksum_str);
-            sprintf(sendbuffer, "client;checksum;%s", checksum_str);
+            sprintf(sendbuffer, "client;checksum;%s;%s", "10.10.40.35", checksum_str);
 			//send MD5 sum to requester before we start to send it the file
-			zmq_send(client, sendbuffer, sizeof(sendbuffer), 0);
+			zmq_send(public, sendbuffer, sizeof(sendbuffer), 0);
 			}
 			
 			int result = send_file_to_requester(client, path);
@@ -57,5 +58,8 @@ int main(int argc, char** argv) {
         memset(path, 0, 256);
     }
     
+    zmq_close(public);
+    zmq_close(client);
+    zmq_ctx_destroy(context);
     return 0;
 }

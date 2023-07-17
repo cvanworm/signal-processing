@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 
         zmq_close(public);
 
-    //Attempt to bind to private socket
+    //Attempt to bind to private sockets
     void *worker = bind_socket(context, "tcp://*:8888");
 
     void *hb = bind_socket(context, "tcp://*:5555");
