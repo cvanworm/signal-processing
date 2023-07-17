@@ -31,7 +31,6 @@ int main(int argc, char** argv) {
     }
 
     void *client = bind_socket(context, "tcp://*:8888");
-    while(1){
         //Attemp to recieve file path from requester
     	char path[256];
         char sendbuffer[MAXLEN];
@@ -56,7 +55,6 @@ int main(int argc, char** argv) {
 			if (result != 0){return -1;}}
         //set path to 0s to avoid potential reruns
         memset(path, 0, 256);
-    }
     
     zmq_close(public);
     zmq_close(client);
